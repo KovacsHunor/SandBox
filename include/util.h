@@ -1,3 +1,7 @@
+struct Global{
+    static const int TILESIZE = 12;
+};
+
 struct Pos{
     int x;
     int y;

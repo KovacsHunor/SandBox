@@ -2,18 +2,15 @@
 #include "particles.h"
 int main()
 {
-    const int size = 10;
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Hello World");
     sf::Clock clock;
-    Particles p(Pos(window.getSize().x/(2*(size+1)), window.getSize().y/(1*(size+1))));
+    Particles p(Pos(window.getSize().x / (2 * (Global::TILESIZE)), window.getSize().y / (1 * (Global::TILESIZE))));
 
-    p.draw(window);
-    window.display();
+    bool pour = false;
     while (window.isOpen())
     {
-        if (clock.getElapsedTime().asSeconds() > 0)
+        if (clock.getElapsedTime().asMilliseconds() > (3.0))
         {
-            p.DEBUG();
             sf::Event event;
             while (window.pollEvent(event))
             {
@@ -21,19 +18,32 @@ int main()
                 {
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
-                        sf::Vector2i position = sf::Mouse::getPosition(window);
-                        Pos click = Pos(position.x/(size+1), (window.getSize().y - position.y)/(size+1));
-
-                        if (Pos(0, 0) <= click && click < p.getSize())
-                        {
-                            p[click] = std::unique_ptr<Sand>(new Sand(click));
-                            p.wake(click);
-                        }
+                        pour = true;
                     }
                 }
-                if (event.type == sf::Event::Closed)
+                else if (event.type == sf::Event::MouseButtonReleased)
+                {
+                    if (event.mouseButton.button == sf::Mouse::Left)
+                    {
+                        pour = false;
+                    }
+                }
+                else if (event.type == sf::Event::Closed)
                     window.close();
             }
+
+            if (pour)
+            {
+                sf::Vector2i position = sf::Mouse::getPosition(window);
+                Pos click = Pos(position.x / (Global::TILESIZE), (window.getSize().y - position.y) / (Global::TILESIZE));
+
+                if (Pos(0, 0) <= click && click < p.getSize())
+                {
+                    p[click] = std::unique_ptr<Sand>(new Sand(click));
+                    p.wake(click);
+                }
+            }
+
             p.tick();
 
             window.clear();

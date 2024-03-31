@@ -25,14 +25,6 @@ public:
         {
             if ((*this)[active.back()]->tick(particles))
             {
-                Pos pos = Pos(active.back().x, active.back().y-1);
-                if(Pos(0,0) <= pos){
-                    temp.push_back(pos);
-                }
-
-
-                // 3 by 3
-                /*
                 for (int i = active.back().x - 1; i <= active.back().x + 1; i++)
                 {
                     for (int j = active.back().y - 1; j <= active.back().y + 1; j++)
@@ -41,7 +33,7 @@ public:
                         if (Pos(0, 0) <= pos && pos < getSize() && std::find(temp.begin(), temp.end(), pos) == temp.end())
                             temp.push_back(pos);
                     }
-                }*/
+                }
             }
             active.pop_back();
         }
