@@ -1,5 +1,7 @@
 #include "particle.h"
 
+Pos Particle::origo = Pos(0, 0);
+
 Air::Air(Pos pos) : Particle(pos)
 {
     color = sf::Color::Blue;
@@ -24,17 +26,20 @@ bool Sand::tick(std::vector<std::vector<std::unique_ptr<Particle>>> &particles)
         particles[pos.x][pos.y]->setPos(Pos(pos.x, pos.y + 1));
 
         particles[pos.x][pos.y].swap(particles[pos.x][pos.y+1]);
-        
 
         return true;
     }
     return false;
 }
 
-void Particle::draw(sf::RenderWindow &window)
+void Particle::draw(const sf::RenderWindow &window, std::vector<sf::Vertex>& vertices)
 {
-    sf::RectangleShape pixel(sf::Vector2f(1, 1));
-    pixel.setPosition(pos.x, window.getSize().y / 5 - 100 - pos.y);
-    pixel.setFillColor(color);
-    window.draw(pixel);
+    sf::Vertex vertex0(sf::Vector2f(origo.x + pos.x*11, window.getSize().y - (origo.y + pos.y*11)), color);
+    sf::Vertex vertex1(sf::Vector2f(origo.x + pos.x*11+11, window.getSize().y - (origo.y + pos.y*11)), color);
+    sf::Vertex vertex2(sf::Vector2f(origo.x + pos.x*11+11, window.getSize().y - (origo.y + pos.y*11+11)), color);
+    sf::Vertex vertex3(sf::Vector2f(origo.x + pos.x*11, window.getSize().y - (origo.y + pos.y*11+11)), color);
+    vertices.push_back(vertex0);
+    vertices.push_back(vertex1);
+    vertices.push_back(vertex2);
+    vertices.push_back(vertex3);
 }

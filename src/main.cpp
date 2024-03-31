@@ -2,15 +2,16 @@
 #include "particles.h"
 int main()
 {
+    const int size = 10;
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Hello World");
     sf::Clock clock;
-    Particles p(Pos(window.getSize().x / 5, window.getSize().y / 5 - 100));
+    Particles p(Pos(window.getSize().x/(2*(size+1)), window.getSize().y/(1*(size+1))));
 
     p.draw(window);
     window.display();
     while (window.isOpen())
     {
-        if (clock.getElapsedTime().asSeconds() > (1 / 60))
+        if (clock.getElapsedTime().asSeconds() > 0)
         {
             p.DEBUG();
             sf::Event event;
@@ -21,7 +22,7 @@ int main()
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
                         sf::Vector2i position = sf::Mouse::getPosition(window);
-                        Pos click = Pos(position.x, p.getSize().y - position.y);
+                        Pos click = Pos(position.x/(size+1), (window.getSize().y - position.y)/(size+1));
 
                         if (Pos(0, 0) <= click && click < p.getSize())
                         {
