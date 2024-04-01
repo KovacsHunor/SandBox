@@ -27,6 +27,6 @@ target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
 target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
 
 target_compile_options(CMakeSFMLProject PRIVATE -Wall -Wextra -Wpedantic -Werror)
-#target_link_options(CMakeSFMLProject PRIVATE -fsanitize=address)
+target_link_options(CMakeSFMLProject PRIVATE -fsanitize=address)
 
 install(TARGETS CMakeSFMLProject)

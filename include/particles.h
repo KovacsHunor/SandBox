@@ -24,15 +24,15 @@ public:
     void wake(Vec p);
     void tick();
     Vec getSize() { return particles.getSize(); }
-    std::vector<std::unique_ptr<Particle>> &operator[](int i)
+    std::vector<Particle*> &operator[](int i)
     {
         return particles[i];
     }
-    std::unique_ptr<Particle> &operator[](Vec p)
+    Particle* &operator[](Vec p)
     {
         return particles[p];
     }
-    ~Particles();
+    virtual ~Particles();
 };
 
 #endif

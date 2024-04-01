@@ -38,6 +38,7 @@ public:
     int getDensity(){
         return material.density;
     }
+    virtual ~Particle(){}
 };
 
 class Liquid : public Particle{
@@ -45,12 +46,14 @@ class Liquid : public Particle{
     public:
     Liquid(Vec pos):Particle(pos), speed(Vec(-1, 0)){}
     bool move(Field<Particle>&);
+    virtual ~Liquid(){}
 };
 
 class Solid : public Particle{
     public:
     Solid(Vec pos):Particle(pos){}
     bool move(Field<Particle>&);
+    virtual ~Solid(){}
 };  
 
 class Water: public Liquid
@@ -59,6 +62,7 @@ public:
     Water(Vec pos);
 
     bool tick(Field<Particle>&);
+    virtual ~Water(){}
 };
 
 class Air: public Liquid
@@ -67,6 +71,7 @@ public:
     Air(Vec pos);
 
     bool tick(Field<Particle>&);
+    virtual ~Air(){}
 };
 
 class Sand: public Solid
@@ -75,6 +80,7 @@ public:
     Sand(Vec pos);
 
     bool tick(Field<Particle>& particles);
+    virtual ~Sand(){}
 };
 
 #endif

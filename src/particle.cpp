@@ -34,7 +34,9 @@ void Particle::swap(Vec delta, Field<Particle> &particles)
 {
     pos += delta;
     particles[pos]->setPos(pos - delta);
-    particles[pos].swap(particles[pos - delta]);
+    Particle *temp = particles[pos];
+    particles[pos] = particles[pos - delta];
+    particles[pos - delta] = temp;
 }
 
 bool Particle::canSwap(Vec delta, Field<Particle> &particles)

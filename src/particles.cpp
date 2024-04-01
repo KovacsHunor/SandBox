@@ -8,7 +8,7 @@ Particles::Particles(Vec size)
         particles.addCol();
         for (int j = 0; j < size.y; j++)
         {
-            particles[i].push_back(std::unique_ptr<Air>(new Air(Vec(i, j))));
+            particles[i].push_back(new Air(Vec(i, j)));
         }
     }
 }
@@ -65,5 +65,14 @@ void Particles::tick()
 
 Particles::~Particles()
 {
+    for (int i = 0; i < particles.getSize().x; i++)
+    {
+        for (int j = 0; j < particles.getSize().y; j++)
+        {
+            delete particles[Vec(i, j)];
+        }
+        
+    }
+    
     particles.clear();
 }

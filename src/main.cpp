@@ -64,13 +64,13 @@ int main()
                     switch (which)
                     {
                     case 0:
-                        p[click] = std::unique_ptr<Air>(new Air(click));
+                        p[click] = new Air(click);
                         break;
                     case 1:
-                        p[click] = std::unique_ptr<Water>(new Water(click));
+                        p[click] = new Water(click);
                         break;
                     case 2:
-                        p[click] = std::unique_ptr<Sand>(new Sand(click));
+                        p[click] = new Sand(click);
                         break;
                     
                     default:
