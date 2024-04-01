@@ -1,16 +1,19 @@
 #include <SFML/Graphics.hpp>
 #include "particles.h"
+#include <time.h>
 int main()
 {
+    srand (time(NULL));
+
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Hello World");
     sf::Clock clock;
-    Particles p(Pos(window.getSize().x / (2 * (Global::TILESIZE)), window.getSize().y / (1 * (Global::TILESIZE))));
+    Particles p(Vec(window.getSize().x / (2 * (Global::TILESIZE)), window.getSize().y / (1 * (Global::TILESIZE))));
 
     bool pour = false;
     int which = 0;
     while (window.isOpen())
     {
-        if (clock.getElapsedTime().asMilliseconds() > (3.0))
+        if (clock.getElapsedTime().asMilliseconds() > (5.0))
         {
             sf::Event event;
             while (window.pollEvent(event))
@@ -54,9 +57,9 @@ int main()
             if (pour)
             {
                 sf::Vector2i position = sf::Mouse::getPosition(window);
-                Pos click = Pos(position.x / (Global::TILESIZE), (window.getSize().y - position.y) / (Global::TILESIZE));
+                Vec click = Vec(position.x / (Global::TILESIZE), (window.getSize().y - position.y) / (Global::TILESIZE));
 
-                if (Pos(0, 0) <= click && click < p.getSize())
+                if (Vec(0, 0) <= click && click < p.getSize())
                 {
                     switch (which)
                     {

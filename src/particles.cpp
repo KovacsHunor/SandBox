@@ -1,13 +1,13 @@
 #include "particles.h"
 
-Particles::Particles(Pos size) : size(size)
+Particles::Particles(Vec size) : size(size)
 {
     for (int i = 0; i < size.x; i++)
     {
         particles.push_back(std::vector<std::unique_ptr<Particle>>());
         for (int j = 0; j < size.y; j++)
         {
-            particles[i].push_back(std::unique_ptr<Air>(new Air(Pos(i, j))));
+            particles[i].push_back(std::unique_ptr<Air>(new Air(Vec(i, j))));
         }
     }
 }
@@ -27,9 +27,22 @@ void Particles::draw(sf::RenderWindow &window)
     window.display();
 }
 
+void Particles::wake(Vec p)
+{
+    for (int i = p.x - 1; i <= p.x + 1; i++)
+    {
+        for (int j = p.y - 1; j <= p.y + 1; j++)
+        {
+            Vec pos = Vec(i, j);
+            if (Vec(0, 0) <= pos && pos < getSize() && std::find(active.begin(), active.end(), pos) == active.end())
+                active.push_back(pos);
+        }
+    }
+}
+
 void Particles::tick()
 {
-    std::vector<Pos> temp;
+    std::vector<Vec> temp;
     while (!active.empty())
     {
         if ((*this)[active.back()]->tick(particles))
@@ -38,8 +51,8 @@ void Particles::tick()
             {
                 for (int j = active.back().y - 1; j <= active.back().y + 1; j++)
                 {
-                    Pos pos = Pos(i, j);
-                    if (Pos(0, 0) <= pos && pos < getSize() && std::find(temp.begin(), temp.end(), pos) == temp.end())
+                    Vec pos = Vec(i, j);
+                    if (Vec(0, 0) <= pos && pos < getSize() && std::find(temp.begin(), temp.end(), pos) == temp.end())
                         temp.push_back(pos);
                 }
             }

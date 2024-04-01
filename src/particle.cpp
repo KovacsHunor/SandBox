@@ -1,10 +1,10 @@
 #include "particle.h"
 
-Pos Particle::origo = Pos(0, 0);
+Vec Particle::origo = Vec(0, 0);
 
-Air::Air(Pos pos) : Liquid(pos)
+Air::Air(Vec pos) : Liquid(pos)
 {
-    color = sf::Color::Black;
+    color = sf::Color(20, 20, 20);
     material = Material(0);
 }
 
@@ -13,7 +13,7 @@ bool Air::tick(std::vector<std::vector<std::unique_ptr<Particle>>> &)
     return false;
 }
 
-Sand::Sand(Pos pos) : Solid(pos)
+Sand::Sand(Vec pos) : Solid(pos)
 {
     color = sf::Color::Yellow;
     material = Material(2);
@@ -26,49 +26,38 @@ bool Sand::tick(std::vector<std::vector<std::unique_ptr<Particle>>> &particles)
 
 void Particle::draw(const sf::RenderWindow &window, std::vector<sf::Vertex> &vertices)
 {
-    sf::Vertex vertex0(sf::Vector2f(origo.x + pos.x * Global::TILESIZE, window.getSize().y - (origo.y + pos.y * Global::TILESIZE)), color);
-    sf::Vertex vertex1(sf::Vector2f(origo.x + pos.x * Global::TILESIZE + Global::TILESIZE, window.getSize().y - (origo.y + pos.y * Global::TILESIZE)), color);
-    sf::Vertex vertex2(sf::Vector2f(origo.x + pos.x * Global::TILESIZE + Global::TILESIZE, window.getSize().y - (origo.y + pos.y * Global::TILESIZE + Global::TILESIZE)), color);
-    sf::Vertex vertex3(sf::Vector2f(origo.x + pos.x * Global::TILESIZE, window.getSize().y - (origo.y + pos.y * Global::TILESIZE + Global::TILESIZE)), color);
-    vertices.push_back(vertex0);
-    vertices.push_back(vertex1);
-    vertices.push_back(vertex2);
-    vertices.push_back(vertex3);
+    vertices.push_back(sf::Vertex(sf::Vector2f(pos.x * Global::TILESIZE, window.getSize().y - pos.y * Global::TILESIZE), color));
+    vertices.push_back(sf::Vertex(sf::Vector2f((pos.x + 1) * Global::TILESIZE, window.getSize().y - pos.y * Global::TILESIZE), color));
+    vertices.push_back(sf::Vertex(sf::Vector2f((pos.x + 1) * Global::TILESIZE, window.getSize().y - (pos.y + 1) * Global::TILESIZE), color));
+    vertices.push_back(sf::Vertex(sf::Vector2f(pos.x * Global::TILESIZE, window.getSize().y - (pos.y + 1) * Global::TILESIZE), color));
+}
+
+void Particle::swap(Vec delta, std::vector<std::vector<std::unique_ptr<Particle>>> &particles)
+{
+    pos += delta;
+    particles[pos.x][pos.y]->setPos(pos - delta);
+    particles[pos.x][pos.y].swap(particles[pos.x - delta.x][pos.y - delta.y]);
+}
+
+bool Particle::canSwap(Vec delta, std::vector<std::vector<std::unique_ptr<Particle>>> &particles)
+{
+    return pos + delta >= 0 && (pos + delta).x < static_cast<int>(particles.size()) && particles[pos.x + delta.x][pos.y + delta.y]->canSink(*this);
 }
 
 bool Solid::move(std::vector<std::vector<std::unique_ptr<Particle>>> &particles)
 {
-    if (0 <= pos.y - 1)
-    {
-        if (particles[pos.x][pos.y - 1]->canSink(*this))
-        {
-            pos.y--;
-            particles[pos.x][pos.y]->setPos(Pos(pos.x, pos.y + 1));
-            particles[pos.x][pos.y].swap(particles[pos.x][pos.y + 1]);
-            return true;
-        }
-        else if (0 <= pos.x - 1 && particles[pos.x - 1][pos.y - 1]->canSink(*this))
-        {
-            pos.y--;
-            pos.x--;
-            particles[pos.x][pos.y]->setPos(Pos(pos.x + 1, pos.y + 1));
-            particles[pos.x][pos.y].swap(particles[pos.x + 1][pos.y + 1]);
-            return true;
-        }
-        else if (static_cast<int>(particles.size()) > pos.x + 1 && particles[pos.x + 1][pos.y - 1]->canSink(*this))
-        {
-            pos.y--;
-            pos.x++;
-            particles[pos.x][pos.y]->setPos(Pos(pos.x - 1, pos.y + 1));
-            particles[pos.x][pos.y].swap(particles[pos.x - 1][pos.y + 1]);
-            return true;
-        }
-    }
-
-    return false;
+    if (canSwap(Vec(0, -1), particles))
+        swap(Vec(0, -1), particles);
+    else if (canSwap(Vec(-1, -1), particles))
+        swap(Vec(-1, -1), particles);
+    else if (canSwap(Vec(1, -1), particles))
+        swap(Vec(1, -1), particles);
+    else
+        return false;
+    return true;
 }
 
-Water::Water(Pos pos) : Liquid(pos)
+Water::Water(Vec pos) : Liquid(pos)
 {
     color = sf::Color::Blue;
     material = Material(1);
@@ -81,27 +70,17 @@ bool Water::tick(std::vector<std::vector<std::unique_ptr<Particle>>> &particles)
 
 bool Liquid::move(std::vector<std::vector<std::unique_ptr<Particle>>> &particles)
 {
-    if (0 <= pos.y - 1 && particles[pos.x][pos.y - 1]->canSink(*this))
-    {
-        pos.y--;
-        particles[pos.x][pos.y]->setPos(Pos(pos.x, pos.y + 1));
-        particles[pos.x][pos.y].swap(particles[pos.x][pos.y + 1]);
-        return true;
-    }
-    else if (0 <= pos.x - 1 && particles[pos.x - 1][pos.y]->canSink(*this))
-    {
-        pos.x--;
-        particles[pos.x][pos.y]->setPos(Pos(pos.x + 1, pos.y));
-        particles[pos.x][pos.y].swap(particles[pos.x + 1][pos.y]);
-        return true;
-    }
-    else if (0 <= pos.x - 1 && static_cast<int>(particles.size()) > pos.x + 1 && particles[pos.x + 1][pos.y]->canSink(*this))
-    {
-        pos.x++;
-        particles[pos.x][pos.y]->setPos(Pos(pos.x - 1, pos.y));
-        particles[pos.x][pos.y].swap(particles[pos.x - 1][pos.y]);
-        return true;
-    }
-
-    return false;
+    if (canSwap(Vec(0, -1), particles))
+        swap(Vec(0, -1), particles);
+    else if (canSwap(Vec(-1, -1), particles))
+        swap(Vec(-1, -1), particles);
+    else if (canSwap(Vec(1, -1), particles))
+        swap(Vec(1, -1), particles);
+    else if (canSwap(Vec(-1, 0), particles))
+        swap(Vec(-1, 0), particles);
+    else if (canSwap(Vec(1, 0), particles))
+        swap(Vec(1, 0), particles);
+    else
+        return false;
+    return true;
 }

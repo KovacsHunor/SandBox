@@ -4,36 +4,25 @@
 #include <algorithm>
 class Particles
 {
-    Pos size;
+    Vec size;
     std::vector<std::vector<std::unique_ptr<Particle>>> particles;
-    std::vector<Pos> active;
+    std::vector<Vec> active;
 
 public:
-    Particles(Pos size);
+    Particles(Vec size);
     void draw(sf::RenderWindow &window);
     void DEBUG()
     {
         std::cout << active.size() << std::endl;
     }
-    void wake(Pos p)
-    {
-        for (int i = p.x - 1; i <= p.x + 1; i++)
-        {
-            for (int j = p.y - 1; j <= p.y + 1; j++)
-            {
-                Pos pos = Pos(i, j);
-                if (Pos(0, 0) <= pos && pos < getSize() && std::find(active.begin(), active.end(), pos) == active.end())
-                    active.push_back(pos);
-            }
-        }
-    }
+    void wake(Vec p);
     void tick();
-    Pos getSize() { return size; }
+    Vec getSize() { return size; }
     std::vector<std::unique_ptr<Particle>> &operator[](int i)
     {
         return particles[i];
     }
-    std::unique_ptr<Particle> &operator[](Pos p)
+    std::unique_ptr<Particle> &operator[](Vec p)
     {
         return particles[p.x][p.y];
     }

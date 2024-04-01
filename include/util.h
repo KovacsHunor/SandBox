@@ -2,24 +2,45 @@ struct Global{
     static const int TILESIZE = 12;
 };
 
-struct Pos{
+struct Vec{
     int x;
     int y;
-    Pos(const Pos& rhs):x(rhs.x), y(rhs.y){}
-    Pos(int x, int y):x(x), y(y){}
-    Pos operator*(const int mul) const{
-        return Pos(x*mul, y*mul);
+
+    Vec(const Vec& rhs):x(rhs.x), y(rhs.y){}
+    Vec(int x = 0, int y = 0):x(x), y(y){}
+    Vec operator*(const int mul) const{
+        return Vec(x*mul, y*mul);
     }
-    bool operator==(const Pos& rhs) const{
+    bool operator==(const Vec& rhs) const{
         return x==rhs.x && y == rhs.y;
     }
-    bool operator<(const Pos& rhs) const{
+    bool operator!=(const int k) const{
+        return (x!=k || y != k);
+    }
+    bool operator>=(const int k) const{
+        return (x>=k && y >= k);
+    }
+    void operator+=(const Vec& rhs){
+        x += rhs.x;
+        y += rhs.y;
+    }
+    void operator*=(const int rhs){
+        x *= rhs;
+        y *= rhs;
+    }
+    Vec operator+(const Vec& rhs) const{
+        return Vec(x+rhs.x, y+rhs.y);
+    }
+    Vec operator-(const Vec& rhs) const{
+        return Vec(x-rhs.x, y-rhs.y);
+    }
+    bool operator<(const Vec& rhs) const{
         return x<rhs.x && y < rhs.y;
     }
-    bool operator<=(const Pos& rhs) const{
+    bool operator<=(const Vec& rhs) const{
         return *this < rhs || *this == rhs;
     }
-    Pos& operator=(const Pos& rhs){
+    Vec& operator=(const Vec& rhs){
         x = rhs.x;
         y = rhs.y;
         return *this;

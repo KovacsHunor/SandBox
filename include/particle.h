@@ -6,22 +6,24 @@
 class Particle
 {
 protected:
-    static Pos origo;
+    static Vec origo;
     sf::Color color;
-    Pos pos;
+    Vec pos;
     Material material;
 
 public:
-    Particle(Pos pos):pos(pos){}
+    Particle(Vec pos):pos(pos){}
 
     void draw(const sf::RenderWindow &window, std::vector<sf::Vertex>& vertices);
 
-    Pos getPos() const {return pos;}
+    Vec getPos() const {return pos;}
 
-    void setPos(Pos p){pos = p;}
+    void swap(Vec delta, std::vector<std::vector<std::unique_ptr<Particle>>> &particles);
 
-    virtual bool canSink(Particle& waiter){return waiter.getDensity() > getDensity();};
+    void setPos(Vec p){pos = p;}
 
+    bool canSink(Particle& waiter){return waiter.getDensity() > getDensity();};
+    bool canSwap(Vec delta, std::vector<std::vector<std::unique_ptr<Particle>>> &particles);
     virtual bool tick(std::vector<std::vector<std::unique_ptr<Particle>>>&){return false;}
     virtual bool move(std::vector<std::vector<std::unique_ptr<Particle>>>&){return false;}
 
@@ -35,21 +37,22 @@ public:
 };
 
 class Liquid : public Particle{
+    Vec speed;
     public:
-    Liquid(Pos pos):Particle(pos){}
+    Liquid(Vec pos):Particle(pos), speed(Vec(-1, 0)){}
     bool move(std::vector<std::vector<std::unique_ptr<Particle>>>&);
 };
 
 class Solid : public Particle{
     public:
-    Solid(Pos pos):Particle(pos){}
+    Solid(Vec pos):Particle(pos){}
     bool move(std::vector<std::vector<std::unique_ptr<Particle>>>&);
 };  
 
 class Water: public Liquid
 {
 public:
-    Water(Pos pos);
+    Water(Vec pos);
 
     bool tick(std::vector<std::vector<std::unique_ptr<Particle>>>&);
 };
@@ -57,7 +60,7 @@ public:
 class Air: public Liquid
 {
 public:
-    Air(Pos pos);
+    Air(Vec pos);
 
     bool tick(std::vector<std::vector<std::unique_ptr<Particle>>>&);
 };
@@ -65,7 +68,7 @@ public:
 class Sand: public Solid
 {
 public:
-    Sand(Pos pos);
+    Sand(Vec pos);
 
     bool tick(std::vector<std::vector<std::unique_ptr<Particle>>>& particles);
 };
