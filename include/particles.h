@@ -11,34 +11,23 @@ class Particles
 public:
     Particles(Pos size);
     void draw(sf::RenderWindow &window);
-    void DEBUG(){
+    void DEBUG()
+    {
         std::cout << active.size() << std::endl;
     }
     void wake(Pos p)
     {
-        active.push_back(p);
-    }
-    void tick()
-    {
-        std::vector<Pos> temp;
-        while (!active.empty())
+        for (int i = p.x - 1; i <= p.x + 1; i++)
         {
-            if ((*this)[active.back()]->tick(particles))
+            for (int j = p.y - 1; j <= p.y + 1; j++)
             {
-                for (int i = active.back().x - 1; i <= active.back().x + 1; i++)
-                {
-                    for (int j = active.back().y - 1; j <= active.back().y + 1; j++)
-                    {
-                        Pos pos = Pos(i, j);
-                        if (Pos(0, 0) <= pos && pos < getSize() && std::find(temp.begin(), temp.end(), pos) == temp.end())
-                            temp.push_back(pos);
-                    }
-                }
+                Pos pos = Pos(i, j);
+                if (Pos(0, 0) <= pos && pos < getSize() && std::find(active.begin(), active.end(), pos) == active.end())
+                    active.push_back(pos);
             }
-            active.pop_back();
         }
-        active = temp;
     }
+    void tick();
     Pos getSize() { return size; }
     std::vector<std::unique_ptr<Particle>> &operator[](int i)
     {
