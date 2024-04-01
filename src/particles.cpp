@@ -1,10 +1,11 @@
 #include "particles.h"
 
-Particles::Particles(Vec size) : size(size)
+Particles::Particles(Vec size)
 {
+    particles.setSize(size);
     for (int i = 0; i < size.x; i++)
     {
-        particles.push_back(std::vector<std::unique_ptr<Particle>>());
+        particles.addCol();
         for (int j = 0; j < size.y; j++)
         {
             particles[i].push_back(std::unique_ptr<Air>(new Air(Vec(i, j))));
@@ -16,9 +17,9 @@ void Particles::draw(sf::RenderWindow &window)
 {
     window.clear();
     std::vector<sf::Vertex> vertices;
-    for (int i = 0; i < size.x; i++)
+    for (int i = 0; i < getSize().x; i++)
     {
-        for (int j = 0; j < size.y; j++)
+        for (int j = 0; j < getSize().y; j++)
         {
             particles[i][j]->draw(window, vertices);
         }

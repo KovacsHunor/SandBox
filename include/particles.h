@@ -1,11 +1,17 @@
+#ifndef PARTICLES_H
+#define PARTICLES_H
+
 #include "particle.h"
 #include "iostream"
+#include "field.h"
+
+
 #include <vector>
 #include <algorithm>
+
 class Particles
 {
-    Vec size;
-    std::vector<std::vector<std::unique_ptr<Particle>>> particles;
+    Field<Particle> particles;
     std::vector<Vec> active;
 
 public:
@@ -17,14 +23,16 @@ public:
     }
     void wake(Vec p);
     void tick();
-    Vec getSize() { return size; }
+    Vec getSize() { return particles.getSize(); }
     std::vector<std::unique_ptr<Particle>> &operator[](int i)
     {
         return particles[i];
     }
     std::unique_ptr<Particle> &operator[](Vec p)
     {
-        return particles[p.x][p.y];
+        return particles[p];
     }
     ~Particles();
 };
+
+#endif

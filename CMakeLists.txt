@@ -18,6 +18,8 @@ target_sources(CMakeSFMLProject
         src/particle.cpp
         src/particles.cpp
         include/particles.h
+        include/field.h
+        include/material.h
         include/particle.h
         include/util.h
 )

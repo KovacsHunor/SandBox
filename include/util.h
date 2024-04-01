@@ -1,3 +1,6 @@
+#ifndef UTIL_H
+#define UTIL_H
+
 struct Global{
     static const int TILESIZE = 12;
 };
@@ -46,3 +49,5 @@ struct Vec{
         return *this;
     }
 };
+
+#endif
