@@ -61,6 +61,7 @@ int main()
 
                 if (Vec(0, 0) <= click && click < p.getSize())
                 {
+                    delete p[click];
                     switch (which)
                     {
                     case 0:

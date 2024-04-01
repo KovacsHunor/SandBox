@@ -73,6 +73,5 @@ Particles::~Particles()
         }
         
     }
-    
     particles.clear();
 }
