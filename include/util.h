@@ -38,7 +38,7 @@ struct Vec{
         return x<rhs.x && y < rhs.y;
     }
     bool operator<=(const Vec& rhs) const{
-        return *this < rhs || *this == rhs;
+        return x <= rhs.x && y <= rhs.y;
     }
     Vec& operator=(const Vec& rhs){
         x = rhs.x;
