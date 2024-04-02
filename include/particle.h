@@ -25,8 +25,11 @@ public:
     void swap(Vec delta, Field<Particle> &particles);
 
     void setPos(Vec p){pos = p;}
+    std::string getName(){
+        return material.name;
+    }
 
-    bool canSink(Particle& waiter){return waiter.getDensity() > getDensity();};
+    virtual bool canSink(Particle& waiter){return waiter.getDensity() > getDensity();};
     bool canSwap(Vec delta, Field<Particle> &particles);
     virtual bool tick(Field<Particle>&){return false;}
     virtual bool move(Field<Particle>&){return false;}
@@ -49,12 +52,28 @@ class Liquid : public Particle{
     virtual ~Liquid(){}
 };
 
+class Immoveable : public Particle{
+    public:
+    Immoveable(Vec pos):Particle(pos){}
+    bool canSink(Particle&){return false;};
+    virtual ~Immoveable(){}
+};
+
 class Solid : public Particle{
     public:
     Solid(Vec pos):Particle(pos){}
     bool move(Field<Particle>&);
     virtual ~Solid(){}
-};  
+};
+
+
+
+class Wood: public Immoveable
+{
+public:
+    Wood(Vec pos);
+    virtual ~Wood(){}
+};
 
 class Water: public Liquid
 {

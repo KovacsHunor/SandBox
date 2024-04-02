@@ -3,7 +3,7 @@
 Air::Air(Vec pos) : Liquid(pos)
 {
     color = sf::Color(20, 20, 20);
-    material = Material(0);
+    material = Material("air", 0);
 }
 
 bool Air::tick(Field<Particle> &)
@@ -14,7 +14,7 @@ bool Air::tick(Field<Particle> &)
 Sand::Sand(Vec pos) : Solid(pos)
 {
     color = sf::Color::Yellow;
-    material = Material(2);
+    material = Material("sand", 2);
 }
 
 bool Sand::tick(Field<Particle> &particles)
@@ -48,19 +48,20 @@ bool Solid::move(Field<Particle> &particles)
 {
     if (canSwap(Vec(0, -1), particles))
         swap(Vec(0, -1), particles);
-    else if (canSwap(Vec(-1, -1), particles))
+    else if (canSwap(Vec(-1, 0), particles) && canSwap(Vec(-1, -1), particles))
         swap(Vec(-1, -1), particles);
-    else if (canSwap(Vec(1, -1), particles))
+    else if (canSwap(Vec(1, 0), particles) && canSwap(Vec(1, -1), particles))
         swap(Vec(1, -1), particles);
     else
         return false;
     return true;
 }
 
+
 Water::Water(Vec pos) : Liquid(pos)
 {
     color = sf::Color::Blue;
-    material = Material(1);
+    material = Material("water", 1);
 }
 
 bool Water::tick(Field<Particle> &particles)
@@ -68,13 +69,14 @@ bool Water::tick(Field<Particle> &particles)
     return move(particles);
 }
 
+
 bool Liquid::move(Field<Particle> &particles)
 {
     if (canSwap(Vec(0, -1), particles))
         swap(Vec(0, -1), particles);
-    else if (canSwap(Vec(-1, -1), particles))
+    else if (canSwap(Vec(-1, 0), particles) && canSwap(Vec(-1, -1), particles))
         swap(Vec(-1, -1), particles);
-    else if (canSwap(Vec(1, -1), particles))
+    else if (canSwap(Vec(1, 0), particles) && canSwap(Vec(1, -1), particles))
         swap(Vec(1, -1), particles);
     else if (canSwap(Vec(-1, 0), particles))
         swap(Vec(-1, 0), particles);
@@ -83,4 +85,10 @@ bool Liquid::move(Field<Particle> &particles)
     else
         return false;
     return true;
+}
+
+Wood::Wood(Vec pos) : Immoveable(pos)
+{
+    color = sf::Color(200, 150, 100);
+    material = Material("wood", 10);
 }

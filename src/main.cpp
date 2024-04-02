@@ -3,7 +3,7 @@
 #include <time.h>
 int main()
 {
-    srand (time(NULL));
+    srand(time(NULL));
 
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Hello World");
     sf::Clock clock;
@@ -11,10 +11,13 @@ int main()
 
     bool pour = false;
     int which = 0;
+    Vec click;
     while (window.isOpen())
     {
         if (clock.getElapsedTime().asMilliseconds() > (5.0))
         {
+            click = Vec(sf::Mouse::getPosition(window).x / (Global::TILESIZE), (window.getSize().y - sf::Mouse::getPosition(window).y) / (Global::TILESIZE));
+            
             sf::Event event;
             while (window.pollEvent(event))
             {
@@ -23,6 +26,17 @@ int main()
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
                         pour = true;
+                    }
+                    if (event.mouseButton.button == sf::Mouse::Right)
+                    {
+                        if (p[click]->getName() == "air")
+                            which = 0;
+                        if (p[click]->getName() == "water")
+                            which = 1;
+                        if (p[click]->getName() == "sand")
+                            which = 2;
+                        if (p[click]->getName() == "wood")
+                            which = 3;
                     }
                 }
                 else if (event.type == sf::Event::MouseButtonReleased)
@@ -34,20 +48,9 @@ int main()
                 }
                 else if (event.type == sf::Event::KeyPressed)
                 {
-                    switch (event.key.code)
+                    if (26 <= event.key.code && event.key.code < 36)
                     {
-                    case sf::Keyboard::Num0:
-                        which = 0;
-                        break;
-                    case sf::Keyboard::Num1:
-                        which = 1;
-                        break;
-                    case sf::Keyboard::Num2:
-                        which = 2;
-                        break;
-                    
-                    default:
-                        break;
+                        which = event.key.code - 26;
                     }
                 }
                 else if (event.type == sf::Event::Closed)
@@ -56,9 +59,6 @@ int main()
 
             if (pour)
             {
-                sf::Vector2i position = sf::Mouse::getPosition(window);
-                Vec click = Vec(position.x / (Global::TILESIZE), (window.getSize().y - position.y) / (Global::TILESIZE));
-
                 if (Vec(0, 0) <= click && click < p.getSize())
                 {
                     delete p[click];
@@ -73,7 +73,10 @@ int main()
                     case 2:
                         p[click] = new Sand(click);
                         break;
-                    
+                    case 3:
+                        p[click] = new Wood(click);
+                        break;
+
                     default:
                         break;
                     }
