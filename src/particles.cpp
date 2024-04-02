@@ -28,6 +28,18 @@ void Particles::draw(sf::RenderWindow &window)
     window.display();
 }
 
+void Particles::clear()
+{
+    for (int i = 0; i < getSize().x; i++)
+    {
+        for (int j = 0; j < getSize().y; j++)
+        {
+            delete particles[i][j];
+            particles[i][j] = new Air(Vec(i, j));
+        }
+    }
+}
+
 void Particles::wake(Vec p)
 {
     for (int i = p.x - 1; i <= p.x + 1; i++)

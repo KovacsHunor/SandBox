@@ -8,27 +8,27 @@
 template<typename T>
 class Field{
     Vec size;
-    std::vector<std::vector<T*>> particles;
+    std::vector<std::vector<T*>> field;
 public:
     void setSize(Vec v){
         size = v;
     }
     void addCol(){
-        particles.push_back(std::vector<T*>());
+        field.push_back(std::vector<T*>());
     }
     void clear(){
-        particles.clear();
+        field.clear();
     }
     Vec getSize(){
         return size;
     }
     T* &operator[](Vec p)
     {
-        return particles[p.x][p.y];
+        return field[p.x][p.y];
     }
     std::vector<T*> &operator[](int i)
     {
-        return particles[i];
+        return field[i];
     }
     virtual ~Field(){}
 };

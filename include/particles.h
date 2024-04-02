@@ -21,6 +21,7 @@ public:
     {
         std::cout << active.size() << std::endl;
     }
+    void clear();
     void wake(Vec p);
     void tick();
     Vec getSize() { return particles.getSize(); }

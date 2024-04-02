@@ -14,14 +14,14 @@ int main()
     Vec click;
     while (window.isOpen())
     {
-        if (clock.getElapsedTime().asMilliseconds() > (5.0))
+        if (clock.getElapsedTime().asMilliseconds() > 0.0)
         {
             click = Vec(sf::Mouse::getPosition(window).x / (Global::TILESIZE), (window.getSize().y - sf::Mouse::getPosition(window).y) / (Global::TILESIZE));
             
             sf::Event event;
             while (window.pollEvent(event))
             {
-                if (event.type == sf::Event::MouseButtonPressed)
+                if (event.type == sf::Event::MouseButtonPressed && click < p.getSize())
                 {
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
@@ -48,9 +48,14 @@ int main()
                 }
                 else if (event.type == sf::Event::KeyPressed)
                 {
-                    if (26 <= event.key.code && event.key.code < 36)
+                    int code = event.key.code;
+
+                    if (26 <= code && code < 36)
                     {
-                        which = event.key.code - 26;
+                        which = code - 26;
+                    }
+                    else if(code == sf::Keyboard::Escape){
+                        p.clear();
                     }
                 }
                 else if (event.type == sf::Event::Closed)
@@ -64,9 +69,6 @@ int main()
                     delete p[click];
                     switch (which)
                     {
-                    case 0:
-                        p[click] = new Air(click);
-                        break;
                     case 1:
                         p[click] = new Water(click);
                         break;
@@ -76,9 +78,8 @@ int main()
                     case 3:
                         p[click] = new Wood(click);
                         break;
-
                     default:
-                        break;
+                        p[click] = new Air(click);
                     }
                     p.wake(click);
                 }

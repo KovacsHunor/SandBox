@@ -3,7 +3,7 @@
 Air::Air(Vec pos) : Liquid(pos)
 {
     color = sf::Color(20, 20, 20);
-    material = Material("air", 0);
+    material = Material("air",0);
 }
 
 bool Air::tick(Field<Particle> &)
