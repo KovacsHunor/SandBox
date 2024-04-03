@@ -17,7 +17,7 @@ int main()
         if (clock.getElapsedTime().asMilliseconds() > 0.0)
         {
             click = Vec(sf::Mouse::getPosition(window).x / (Global::TILESIZE), (window.getSize().y - sf::Mouse::getPosition(window).y) / (Global::TILESIZE));
-            
+
             sf::Event event;
             while (window.pollEvent(event))
             {
@@ -54,7 +54,8 @@ int main()
                     {
                         which = code - 26;
                     }
-                    else if(code == sf::Keyboard::Escape){
+                    else if (code == sf::Keyboard::Escape)
+                    {
                         p.clear();
                     }
                 }
@@ -78,6 +79,9 @@ int main()
                     case 3:
                         p[click] = new Wood(click);
                         break;
+                    case 4:
+                        p[click] = new Wood(click, true);
+                        break;
                     default:
                         p[click] = new Air(click);
                     }
@@ -86,9 +90,7 @@ int main()
             }
 
             p.tick();
-
             p.draw(window);
-
             clock.restart();
         }
     }

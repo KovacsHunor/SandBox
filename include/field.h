@@ -5,32 +5,43 @@
 #include "util.h"
 #include <memory>
 
-template<typename T>
-class Field{
+template <typename T>
+class Field
+{
     Vec size;
-    std::vector<std::vector<T*>> field;
+    std::vector<std::vector<T *>> field;
+
 public:
-    void setSize(Vec v){
+    void setSize(Vec v)
+    {
         size = v;
     }
-    void addCol(){
-        field.push_back(std::vector<T*>());
+    void transmutate(Vec pos, T *into)
+    {
+        delete (*this)[pos];
+        (*this)[pos] = into;
     }
-    void clear(){
+    void addCol()
+    {
+        field.push_back(std::vector<T *>());
+    }
+    void clear()
+    {
         field.clear();
     }
-    Vec getSize(){
+    Vec getSize()
+    {
         return size;
     }
-    T* &operator[](Vec p)
+    T *&operator[](Vec p)
     {
         return field[p.x][p.y];
     }
-    std::vector<T*> &operator[](int i)
+    std::vector<T *> &operator[](int i)
     {
         return field[i];
     }
-    virtual ~Field(){}
+    virtual ~Field() {}
 };
 
 #endif

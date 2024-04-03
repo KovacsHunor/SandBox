@@ -3,7 +3,7 @@
 Air::Air(Vec pos) : Liquid(pos)
 {
     color = sf::Color(20, 20, 20);
-    material = Material("air",0);
+    material = Material("air", sf::Color(20, 20, 20), 0);
 }
 
 bool Air::tick(Field<Particle> &)
@@ -14,7 +14,7 @@ bool Air::tick(Field<Particle> &)
 Sand::Sand(Vec pos) : Solid(pos)
 {
     color = sf::Color::Yellow;
-    material = Material("sand", 2);
+    material = Material("sand", sf::Color::Yellow, 2);
 }
 
 bool Sand::tick(Field<Particle> &particles)
@@ -57,18 +57,16 @@ bool Solid::move(Field<Particle> &particles)
     return true;
 }
 
-
 Water::Water(Vec pos) : Liquid(pos)
 {
     color = sf::Color::Blue;
-    material = Material("water", 1);
+    material = Material("water", sf::Color::Blue, 1);
 }
 
 bool Water::tick(Field<Particle> &particles)
 {
     return move(particles);
 }
-
 
 bool Liquid::move(Field<Particle> &particles)
 {
@@ -87,8 +85,53 @@ bool Liquid::move(Field<Particle> &particles)
     return true;
 }
 
-Wood::Wood(Vec pos) : Immoveable(pos)
+Wood::Wood(Vec pos, bool onFire) : Immoveable(pos), Flammable(onFire)
 {
     color = sf::Color(200, 150, 100);
-    material = Material("wood", 10);
+    material = Material("wood", sf::Color(200, 150, 100), 10);
+}
+
+bool Wood::tick(Field<Particle> &particles)
+{
+    if (onFire)
+    {
+        for (int i = pos.x - 1; i <= pos.x + 1; i++)
+        {
+            for (int j = pos.y - 1; j <= pos.y + 1; j++)
+            {
+                Vec p = Vec(i, j);
+                if (Vec(0, 0) <= p && p < particles.getSize())
+                    particles[p]->heat(particles);
+            }
+        }
+
+        if(rand() % 200 == 0){
+            particles.transmutate(pos, new Air(pos));
+            return true;
+        }
+        
+
+        if (!getAir(particles))
+        {
+            extinguish();
+        }
+
+        return true;
+    }
+    return false;
+}
+
+bool Flammable::getAir(Field<Particle> &particles)
+{
+    for (int i = pos.x - 1; i <= pos.x + 1; i++)
+    {
+        for (int j = pos.y - 1; j <= pos.y + 1; j++)
+        {
+            Vec p = Vec(i, j);
+            if (Vec(0, 0) <= p && p < particles.getSize())
+                if (particles[p]->getName() == "air")
+                    return true;
+        }
+    }
+    return false;
 }
