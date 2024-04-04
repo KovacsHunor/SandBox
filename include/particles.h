@@ -24,6 +24,9 @@ public:
     void clear();
     void wake(Vec p);
     void tick();
+    bool validPos(Vec p){
+        return particles.validPos(p);
+    }
     Vec getSize() { return particles.getSize(); }
     std::vector<Particle*> &operator[](int i)
     {

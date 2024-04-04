@@ -2,7 +2,7 @@
 #define UTIL_H
 
 struct Global{
-    static const int TILESIZE = 13;
+    static const int TILESIZE = 15;
 };
 
 struct Vec{
@@ -16,6 +16,10 @@ struct Vec{
     }
     bool operator==(const Vec& rhs) const{
         return x==rhs.x && y == rhs.y;
+    }
+    bool operator!=(const Vec& rhs) const{
+        if(*this == rhs) return false;
+        return true;
     }
     bool operator!=(const int k) const{
         return (x!=k || y != k);

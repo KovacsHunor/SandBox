@@ -87,8 +87,9 @@ bool Liquid::move(Field<Particle> &particles)
 
 Wood::Wood(Vec pos, bool onFire) : Immoveable(pos), Flammable(onFire)
 {
-    color = sf::Color(200, 150, 100);
     material = Material("wood", sf::Color(200, 150, 100), 10);
+    if (!onFire)
+        color = material.color;
 }
 
 bool Wood::tick(Field<Particle> &particles)
@@ -100,16 +101,26 @@ bool Wood::tick(Field<Particle> &particles)
             for (int j = pos.y - 1; j <= pos.y + 1; j++)
             {
                 Vec p = Vec(i, j);
+                if (p != pos && j == pos.y - 1)
+                {
+                    if (rand() % 2 != 0)
+                        continue;
+                }
+
                 if (Vec(0, 0) <= p && p < particles.getSize())
+                {
+                    if (rand() % 20 != 0)
+                        continue;
                     particles[p]->heat(particles);
+                }
             }
         }
-
-        if(rand() % 200 == 0){
+        lifeTime -= rand() % 7 + 1;
+        if (lifeTime < 0)
+        {
             particles.transmutate(pos, new Air(pos));
             return true;
         }
-        
 
         if (!getAir(particles))
         {

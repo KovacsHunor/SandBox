@@ -7,7 +7,7 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Hello World");
     sf::Clock clock;
-    Particles p(Vec(window.getSize().x / (2 * (Global::TILESIZE)), window.getSize().y / (1 * (Global::TILESIZE))));
+    Particles p(Vec(window.getSize().x / (1 * (Global::TILESIZE)), window.getSize().y / (1 * (Global::TILESIZE))));
 
     bool pour = false;
     int which = 0;
@@ -65,27 +65,35 @@ int main()
 
             if (pour)
             {
-                if (Vec(0, 0) <= click && click < p.getSize())
+                for (int i = click.x - 1; i <= click.x; i++)
                 {
-                    delete p[click];
-                    switch (which)
+                    for (int j = click.y - 1; j <= click.y; j++)
                     {
-                    case 1:
-                        p[click] = new Water(click);
-                        break;
-                    case 2:
-                        p[click] = new Sand(click);
-                        break;
-                    case 3:
-                        p[click] = new Wood(click);
-                        break;
-                    case 4:
-                        p[click] = new Wood(click, true);
-                        break;
-                    default:
-                        p[click] = new Air(click);
+                        Vec pos = Vec(i, j);
+
+                        if (p.validPos(pos))
+                        {
+                            delete p[pos];
+                            switch (which)
+                            {
+                            case 1:
+                                p[pos] = new Water(pos);
+                                break;
+                            case 2:
+                                p[pos] = new Sand(pos);
+                                break;
+                            case 3:
+                                p[pos] = new Wood(pos);
+                                break;
+                            case 4:
+                                p[pos] = new Wood(pos, true);
+                                break;
+                            default:
+                                p[pos] = new Air(pos);
+                            }
+                            p.wake(pos);
+                        }
                     }
-                    p.wake(click);
                 }
             }
 

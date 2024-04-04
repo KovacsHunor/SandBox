@@ -25,6 +25,9 @@ public:
     {
         field.push_back(std::vector<T *>());
     }
+    bool validPos(Vec p){
+        return Vec(0, 0) <= p && p < getSize();
+    }
     void clear()
     {
         field.clear();
