@@ -1,79 +1,57 @@
 #include "liquid.h"
+
 #include "gas.h"
 
-Water::Water(Vec pos) : Liquid(pos)
-{
-    color = sf::Color::Blue;
-    material = Material("water", color, 4);
+Water::Water(Vec pos) : Liquid(pos) {
+	updated.push_back(pos);
+	color = sf::Color::Blue;
+	material = Material("water", color, 4);
 }
 
-void Water::heat(Field<Particle *> &particles)
-{
-    particles.transmutate(pos, new Steam(pos));
+void Water::heat(Field<Particle *> &particles) { particles.transmutate(pos, new Steam(pos)); }
+
+bool Water::tick(Field<Particle *> &particles) { return move(particles); }
+
+bool Liquid::move(Field<Particle *> &particles) {
+	if (trySwap(Vec(0, -1), particles)) return true;
+	if (canSwap(Vec(-1, 0), particles) && trySwap(Vec(-1, -1), particles)) return true;
+	if (canSwap(Vec(1, 0), particles) && trySwap(Vec(1, -1), particles)) return true;
+	if (trySwap(Vec(-1, 0), particles)) return true;
+	if (trySwap(Vec(1, 0), particles)) return true;
+	return false;
 }
 
-bool Water::tick(Field<Particle *> &particles)
-{
-    return move(particles);
+Oil::Oil(Vec pos, bool onFire) : Liquid(pos), Flammable(onFire) {
+	updated.push_back(pos);
+	material = Material("oil", sf::Color(55, 58, 54), 2);
+	if (!onFire) color = material.color;
 }
 
-bool Liquid::move(Field<Particle *> &particles)
-{
-    if (trySwap(Vec(0, -1), particles))
-        return true;
-    if (canSwap(Vec(-1, 0), particles) && trySwap(Vec(-1, -1), particles))
-        return true;
-    if (canSwap(Vec(1, 0), particles) && trySwap(Vec(1, -1), particles))
-        return true;
-    if (trySwap(Vec(-1, 0), particles))
-        return true;
-    if (trySwap(Vec(1, 0), particles))
-        return true;
-    return false;
-}
+bool Oil::tick(Field<Particle *> &particles) {
+	bool event = move(particles);
+	if (onFire) {
+		for (int i = pos.x - 1; i <= pos.x + 1; i++) {
+			for (int j = pos.y - 1; j <= pos.y + 1; j++) {
+				Vec p = Vec(i, j);
 
-Oil::Oil(Vec pos, bool onFire) : Liquid(pos), Flammable(onFire)
-{
-    updated.push_back(pos);
-    material = Material("oil", sf::Color(55, 58, 54), 2);
-    if (!onFire)
-        color = material.color;
-}
+				if (Vec(0, 0) <= p && p < particles.getSize()) {
+					if (rand() % 20 != 0) continue;
+					particles[p]->heat(particles);
+				}
+			}
+		}
+		lifeTime -= rand() % 20;
+		if (lifeTime < 0) {
+			if (rand() % 20 == 0) {
+				particles.transmutate(pos, new Air(pos));
+				return true;
+			}
+		}
 
-bool Oil::tick(Field<Particle *> &particles)
-{
-    bool event = move(particles);
-    if (onFire)
-    {
-        for (int i = pos.x - 1; i <= pos.x + 1; i++)
-        {
-            for (int j = pos.y - 1; j <= pos.y + 1; j++)
-            {
-                Vec p = Vec(i, j);
-
-                if (Vec(0, 0) <= p && p < particles.getSize())
-                {
-                    if (rand() % 20 != 0)
-                        continue;
-                    particles[p]->heat(particles);
-                }
-            }
-        }
-        lifeTime -= rand() % 20;
-        if (lifeTime < 0)
-        {
-            if (rand() % 20 == 0)
-            {
-                particles.transmutate(pos, new Air(pos));
-                return true;
-            }
-        }
-
-        if (!getAir(particles) && rand()%3 == 0)
-        {
-            extinguish();
-        }
-        event = true;
-    }
-    return event;
+		if (!getAir(particles) && rand() % 3 == 0) {
+			extinguish();
+		}
+		event = true;
+	}
+	return event;
 }

@@ -1,4 +1,5 @@
 {
+    "editor.formatOnSave": true,
     "cmake.sourceDirectory": "/home/pangolin/Programming/BME/Semester2/NHF/SandBox",
     "files.associations": {
         "iostream": "cpp",
