@@ -1,0 +1,3 @@
+/home/pangolin/Programming/BME/Semester2/NHF/SandBox/build/_deps/sfml-subbuild/CMakeFiles/sfml-populate.dir
+/home/pangolin/Programming/BME/Semester2/NHF/SandBox/build/_deps/sfml-subbuild/CMakeFiles/edit_cache.dir
+/home/pangolin/Programming/BME/Semester2/NHF/SandBox/build/_deps/sfml-subbuild/CMakeFiles/rebuild_cache.dir

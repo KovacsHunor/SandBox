@@ -1,0 +1,7 @@
+/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/build/CMakeFiles/NAME.dir
+/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/build/CMakeFiles/edit_cache.dir
+/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/build/CMakeFiles/rebuild_cache.dir
+/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/build/CMakeFiles/list_install_components.dir
+/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/build/CMakeFiles/install.dir
+/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/build/CMakeFiles/install/local.dir
+/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/build/CMakeFiles/install/strip.dir
