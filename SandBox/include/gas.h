@@ -9,8 +9,10 @@
 
 class Gas : public Particle
 {
+    Vec speed;
 public:
-    Gas(Vec pos) : Particle(pos) {}
+    Gas(Vec pos) : Particle(pos) {speed = Vec(0, 0);}
+
     bool isGas(){return true;}
     virtual bool canSwap(Vec delta, Field<Particle *> &particles);
 	virtual bool move(Field<Particle *> &);

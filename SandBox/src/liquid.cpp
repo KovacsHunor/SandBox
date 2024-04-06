@@ -24,14 +24,36 @@ bool Water::tick(Field<Particle *> &particles) {
 }
 
 bool Liquid::move(Field<Particle *> &particles) {
-	if (trySwap(Vec(0, -1), particles)) return true;
-	if (canSwap(Vec(-1, 0), particles) && trySwap(Vec(-1, -1), particles)) return true;
-	if (canSwap(Vec(1, 0), particles) && trySwap(Vec(1, -1), particles)) return true;
-	if (trySwap(Vec(-1, 0), particles)) return true;
-	if (trySwap(Vec(1, 0), particles)) return true;
+	if (trySwap(Vec(0, -1), particles)) {
+		speed = Vec(0, 0);
+		return true;
+	}
+	if (canSwap(Vec(-1, 0), particles) && trySwap(Vec(-1, -1), particles)) {
+		speed = Vec(0, 0);
+		return true;
+	}
+	if (canSwap(Vec(1, 0), particles) && trySwap(Vec(1, -1), particles)) {
+		speed = Vec(0, 0);
+		return true;
+	}
+	if (trySwap(speed, particles)) return true;
+	if (canSwap(Vec(-1, 0), particles) && canSwap(Vec(1, 0), particles)) {
+		if (rand() % 2 == 0)
+			speed = Vec(1, 0);
+		else
+			speed = Vec(-1, 0);
+		return true;
+	}
+	if (canSwap(Vec(-1, 0), particles)) {
+		speed = Vec(-1, 0);
+		return true;
+	}
+	if (canSwap(Vec(1, 0), particles)) {
+		speed = Vec(1, 0);
+		return true;
+	}
 	return false;
 }
-
 Oil::Oil(Vec pos, bool onFire) : Liquid(pos), Flammable(onFire) {
 	updated.push_back(pos);
 	material = Material("oil", sf::Color(55, 58, 54), 2);
