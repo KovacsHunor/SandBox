@@ -9,6 +9,7 @@ include_directories(include)
 target_sources(NAME
     PRIVATE
         src/main.cpp
+        src/qmaster.cpp
         include/node.h
         include/qmaster.h
 )

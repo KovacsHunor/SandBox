@@ -56,6 +56,13 @@ build CMakeFiles/NAME.dir/src/main.cpp.o: CXX_COMPILER__NAME_Debug /home/pangoli
   OBJECT_DIR = CMakeFiles/NAME.dir
   OBJECT_FILE_DIR = CMakeFiles/NAME.dir/src
 
+build CMakeFiles/NAME.dir/src/qmaster.cpp.o: CXX_COMPILER__NAME_Debug /home/pangolin/Programming/BME/Semester2/NHF/Barkochba/src/qmaster.cpp || cmake_object_order_depends_target_NAME
+  DEP_FILE = CMakeFiles/NAME.dir/src/qmaster.cpp.o.d
+  FLAGS = -g -Wall -Wextra -Wpedantic -Werror
+  INCLUDES = -I/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/include
+  OBJECT_DIR = CMakeFiles/NAME.dir
+  OBJECT_FILE_DIR = CMakeFiles/NAME.dir/src
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target NAME
@@ -64,7 +71,7 @@ build CMakeFiles/NAME.dir/src/main.cpp.o: CXX_COMPILER__NAME_Debug /home/pangoli
 #############################################
 # Link the executable bin/NAME
 
-build bin/NAME: CXX_EXECUTABLE_LINKER__NAME_Debug CMakeFiles/NAME.dir/src/main.cpp.o
+build bin/NAME: CXX_EXECUTABLE_LINKER__NAME_Debug CMakeFiles/NAME.dir/src/main.cpp.o CMakeFiles/NAME.dir/src/qmaster.cpp.o
   FLAGS = -g
   LINK_FLAGS = -fsanitize=address
   OBJECT_DIR = CMakeFiles/NAME.dir

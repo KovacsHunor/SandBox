@@ -1,0 +1,34 @@
+tárgy
+0
+fel lehet vele hívni embereket
+0
+kisebb mint egy telefon
+0
+okosóra
+1
+telefon
+1
+játtszani lehet vele
+0
+kereke van
+0
+matchbox kisautó
+1
+yoyo
+1
+asztal
+1
+főként afrikában él
+0
+növény
+0
+majomkenyérfa
+1
+oroszlán
+1
+növény
+0
+fenyőfa
+1
+pingvin
+1
