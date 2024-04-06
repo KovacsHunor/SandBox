@@ -4,8 +4,11 @@
 int main()
 {
     bool end = false;
+    Node *start = new Node("tárgy");
+    start->setNo(new Node("pingvin"));
+    start->setYes(new Node("asztal"));
 
-    Qmaster master;
+    Qmaster master(start);
     while (!end)
     {
         master.ask();
@@ -13,11 +16,11 @@ int main()
             master.reset();
             std::cout << "mégegyszer?" << std::endl;
             std::string str;
-            getline(std::cin, str);
+            std::cin >> str;
             if(str == "nem"){
                 end = true;
             }
-            //system("clear");
+            system("clear");
         };
     }
     return 0;

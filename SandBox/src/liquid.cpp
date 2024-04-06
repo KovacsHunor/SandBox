@@ -8,9 +8,20 @@ Water::Water(Vec pos) : Liquid(pos) {
 	material = Material("water", color, 4);
 }
 
-void Water::heat(Field<Particle *> &particles) { particles.transmutate(pos, new Steam(pos)); }
+void Water::heat(Field<Particle *> &particles) {
+	if (rand() % 2 == 0)
+		particles.transmutate(pos, new Steam(pos));
+	else
+		particles.transmutate(pos, new Air(pos));
+}
 
-bool Water::tick(Field<Particle *> &particles) { return move(particles); }
+bool Water::tick(Field<Particle *> &particles) {
+	if (rand() % 3000 == 0) {
+		heat(particles);
+		return true;
+	}
+	return move(particles);
+}
 
 bool Liquid::move(Field<Particle *> &particles) {
 	if (trySwap(Vec(0, -1), particles)) return true;
@@ -42,13 +53,13 @@ bool Oil::tick(Field<Particle *> &particles) {
 		}
 		lifeTime -= rand() % 20;
 		if (lifeTime < 0) {
-			if (rand() % 20 == 0) {
+			if (rand() % 15 == 0) {
 				particles.transmutate(pos, new Air(pos));
 				return true;
 			}
 		}
 
-		if (!getAir(particles) && rand() % 3 == 0) {
+		if (!getAir(particles) && rand() % 24 < 7) {
 			extinguish();
 		}
 		event = true;

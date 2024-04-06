@@ -7,21 +7,13 @@ class Qmaster
     Node *current;
 
 public:
-    Qmaster(Node *start = nullptr) : start(start){
-        load();
-        current = this->start;
-    }
-    void write(Node* c, std::ofstream & file);
-    void build(Node* &c, std::ifstream & file);
-    void save();
-    void load();
+    Qmaster(Node *start = nullptr) : start(start), current(start) {}
     void ask()
     {
         std::cout << current->getName() << '?' << std::endl;
     }
     void reset(){
         current = start;
-        save();
     }
     bool process()
     {

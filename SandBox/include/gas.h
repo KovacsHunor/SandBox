@@ -11,8 +11,10 @@ class Gas : public Particle
 {
 public:
     Gas(Vec pos) : Particle(pos) {}
-    bool move(Field<Particle *> &);
-    virtual ~Gas(){};
+    bool isGas(){return true;}
+    virtual bool canSwap(Vec delta, Field<Particle *> &particles);
+	virtual bool move(Field<Particle *> &);
+	virtual ~Gas(){};
 };
 
 
@@ -20,7 +22,7 @@ class Air : public Gas
 {
 public:
     Air(Vec pos = Vec(0, 0));
-
+    bool move(Field<Particle *> &){return false;};
     bool tick(Field<Particle *> &);
     virtual ~Air() {}
 };

@@ -3,10 +3,5 @@
   "directory": "/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/build",
   "command": "/usr/bin/g++ -I/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/include -g -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/NAME.dir/src/main.cpp.o -c /home/pangolin/Programming/BME/Semester2/NHF/Barkochba/src/main.cpp",
   "file": "/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/src/main.cpp"
-},
-{
-  "directory": "/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/build",
-  "command": "/usr/bin/g++ -I/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/include -g -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/NAME.dir/src/qmaster.cpp.o -c /home/pangolin/Programming/BME/Semester2/NHF/Barkochba/src/qmaster.cpp",
-  "file": "/home/pangolin/Programming/BME/Semester2/NHF/Barkochba/src/qmaster.cpp"
 }
 ]
