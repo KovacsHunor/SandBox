@@ -15,9 +15,10 @@ int main() {
 
 	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,
 										  sf::VideoMode::getDesktopMode().height),
-							"Hello World");
+							"SandBox");
 	sf::Clock clock1;
 	sf::Clock clock2;
+	sf::Clock clock3;
 	Particles p(Vec(window.getSize().x / (2 * (Global::TILESIZE)),
 					window.getSize().y / (1 * (Global::TILESIZE))));
 
@@ -26,10 +27,7 @@ int main() {
 	Vec click;
 	window.clear(sf::Color(10, 10, 10));
 	while (window.isOpen()) {
-		if (clock1.getElapsedTime().asMilliseconds() > 15.0) {
-			p.draw(window);
-			clock1.restart();
-
+		if (clock2.getElapsedTime().asSeconds() > 1 / 66.0) {
 			click =
 				Vec(sf::Mouse::getPosition(window).x / (Global::TILESIZE),
 					(window.getSize().y - sf::Mouse::getPosition(window).y) / (Global::TILESIZE));
@@ -45,7 +43,9 @@ int main() {
 						if (p[click]->getName() == "water") which = 1;
 						if (p[click]->getName() == "sand") which = 2;
 						if (p[click]->getName() == "wood") which = 3;
-						if (p[click]->getName() == "wood") which = 5;
+						if (p[click]->getName() == "oil") which = 5;
+						if (p[click]->getName() == "stone") which = 6;
+						if (p[click]->getName() == "acid") which = 6;
 					}
 				} else if (event.type == sf::Event::MouseButtonReleased) {
 					if (event.mouseButton.button == sf::Mouse::Left) {
@@ -86,6 +86,12 @@ int main() {
 								case 5:
 									p[pos] = new Oil(pos);
 									break;
+								case 6:
+									p[pos] = new Stone(pos);
+									break;
+								case 7:
+									p[pos] = new Acid(pos);
+									break;
 								default:
 									p[pos] = new Air(pos);
 							}
@@ -96,9 +102,16 @@ int main() {
 			}
 
 			p.tick();
+			clock2.restart();
 		}
-		if (clock1.getElapsedTime().asSeconds() > (1 / 20.0)) {
+
+		if (clock1.getElapsedTime().asSeconds() > 1 / 60.0) {
 			p.draw(window);
+			if (clock3.getElapsedTime().asSeconds() > 1) {
+				clock3.restart();
+
+				std::cout << "fps:" << 1 / clock1.getElapsedTime().asSeconds() << std::endl;
+			}
 			clock1.restart();
 		}
 	}

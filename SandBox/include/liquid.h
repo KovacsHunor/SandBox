@@ -19,6 +19,14 @@ class Liquid : virtual public Particle {
 	virtual ~Liquid(){};
 };
 
+class Acid : public Liquid {
+   public:
+	Acid(Vec pos);
+	bool allAcid(Field<Particle *> &particles);
+	bool tick(Field<Particle *> &);
+	virtual ~Acid() {}
+};
+
 class Water : public Liquid {
    public:
 	Water(Vec pos);

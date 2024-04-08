@@ -18,7 +18,7 @@ bool Steam::tick(Field<Particle *> &particles) {
 		particles.transmutate(pos, new Water(pos));
 		return true;
 	}
-	if (getAir(particles) || rand() % 5 == 0) {
+	if (getAir(particles)) {
 		return true;
 	}
 	return false;

@@ -73,9 +73,9 @@ bool Oil::tick(Field<Particle *> &particles) {
 				}
 			}
 		}
-		lifeTime -= rand() % 20;
+		lifeTime -= rand() % 50;
 		if (lifeTime < 0) {
-			if (rand() % 15 == 0) {
+			if (rand() % 10 == 0) {
 				particles.transmutate(pos, new Air(pos));
 				return true;
 			}
@@ -87,4 +87,38 @@ bool Oil::tick(Field<Particle *> &particles) {
 		event = true;
 	}
 	return event;
+}
+
+Acid::Acid(Vec pos) : Liquid(pos) {
+	updated.push_back(pos);
+	material = Material("acid", sf::Color(143, 254, 9), 4);
+	color = material.color;
+}
+
+bool Acid::allAcid(Field<Particle *> &particles) {
+	for (int i = pos.x - 1; i <= pos.x + 1; i++) {
+		for (int j = pos.y - 1; j <= pos.y + 1; j++) {
+			Vec p = Vec(i, j);
+			if (Vec(0, 0) <= p && p < particles.getSize() && p != pos)
+				if (particles[p]->getName() != "acid") return false;
+		}
+	}
+	return true;
+}
+
+bool Acid::tick(Field<Particle *> &particles) {
+	move(particles);
+	Vec corrodex = Vec(pos.x + 1 - 2 * (rand() % 2), pos.y);
+	Vec corrodey = Vec(pos.x, pos.y + 1 - 2 * (rand() % 2));
+	if (allAcid(particles)) return false;
+	if ((rand() % 15 == 0) && (corrodey >= 0 && corrodey < particles.getSize()) && !(particles[corrodey]->getName() == "acid") &&
+		!(particles[corrodey]->getName() == "air")) {
+		particles.transmutate(corrodey, new Air(corrodey));
+		particles.transmutate(pos, new Air(pos));
+	} else if ((rand() % 60 == 0) && (corrodex >= 0 && corrodex < particles.getSize()) && !(particles[corrodex]->getName() == "acid") &&
+		!(particles[corrodex]->getName() == "air")) {
+		particles.transmutate(corrodex, new Air(corrodex));
+		particles.transmutate(pos, new Air(pos));
+	}
+	return true;
 }
