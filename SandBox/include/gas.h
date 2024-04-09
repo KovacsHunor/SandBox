@@ -16,6 +16,7 @@ public:
     bool isGas(){return true;}
     virtual bool canSwap(Vec delta, Field<Particle *> &particles);
 	virtual bool move(Field<Particle *> &);
+    bool canCorrode(){return false;}
 	virtual ~Gas(){};
 };
 

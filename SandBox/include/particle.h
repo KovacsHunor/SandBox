@@ -24,8 +24,8 @@ class Particle {
 	static Vec updateBack() { return updated.back(); }
 	static void updatePop() { return updated.pop_back(); }
 	static void DEBUG() { std::cout << active.size() << std::endl; }
-    
-    virtual bool isGas(){return false;}
+	virtual bool canCorrode(){return true;}
+	virtual bool isGas() { return false; }
 	bool getAir(Field<Particle *> &particles);
 
 	void draw(const sf::RenderWindow &window, std::vector<sf::Vertex> &vertices);
