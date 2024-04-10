@@ -22,8 +22,7 @@ class Liquid : virtual public Particle {
 class Acid : public Liquid {
    public:
 	Acid(Vec pos);
-	bool allAcid(Field<Particle *> &particles);
-	bool canCorrode(){return false;}
+	bool canCorrode() { return false; }
 	bool tick(Field<Particle *> &);
 	virtual ~Acid() {}
 };

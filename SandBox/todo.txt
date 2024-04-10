@@ -1,0 +1,6 @@
+-only neighbours visible
+-update even still water
+-glass
+-transmutation pointer + sign (make sure to delete the allocated memory)
+-clearer denser function (denserthan)
+-faster algorithm for not updating the same position twice in a frame

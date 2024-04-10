@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <queue>
 
 #include "field.h"
 #include "material.h"
@@ -13,18 +14,16 @@ class Particle {
 	sf::Color color;
 	Vec pos;
 	Material material;
+	Field<Particle **> neighbours;
 
    public:
-	static std::vector<Vec> updated;
-	static std::vector<Vec> active;
+	static std::deque<Vec> updated;
+	static std::deque<Vec> active;
 
 	Particle() {}
 	Particle(Vec pos) : pos(pos) { updated.push_back(pos); }
-	static size_t updateSize() { return updated.size(); }
-	static Vec updateBack() { return updated.back(); }
-	static void updatePop() { return updated.pop_back(); }
 	static void DEBUG() { std::cout << active.size() << std::endl; }
-	virtual bool canCorrode(){return true;}
+	virtual bool canCorrode() { return true; }
 	virtual bool isGas() { return false; }
 	bool getAir(Field<Particle *> &particles);
 

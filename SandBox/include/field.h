@@ -44,10 +44,6 @@ public:
     {
         return field[p.x][p.y];
     }
-    T& operator()( const Vec p)
-    {
-        return field[p.x][p.y];
-    }
     virtual ~Field() {
         
     }

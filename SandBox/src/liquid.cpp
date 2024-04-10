@@ -95,22 +95,11 @@ Acid::Acid(Vec pos) : Liquid(pos) {
 	color = material.color;
 }
 
-bool Acid::allAcid(Field<Particle *> &particles) {
-	for (int i = pos.x - 1; i <= pos.x + 1; i++) {
-		for (int j = pos.y - 1; j <= pos.y + 1; j++) {
-			Vec p = Vec(i, j);
-			if (particles.validPos(p) && p != pos && particles[p]->getName() != "acid")
-				return false;
-		}
-	}
-	return true;
-}
-
 bool Acid::tick(Field<Particle *> &particles) {
 	bool action = move(particles);
 	Vec corrodex = Vec(pos.x + 1 - 2 * (rand() % 2), pos.y);
 	Vec corrodey = Vec(pos.x, pos.y + 1 - 2 * (rand() % 2));
-	
+
 	if ((rand() % 15 == 0) && (corrodey >= 0 && corrodey < particles.getSize()) &&
 		particles[corrodey]->canCorrode()) {
 		particles.transmutate(corrodey, new Air(corrodey));

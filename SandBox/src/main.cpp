@@ -27,7 +27,7 @@ int main() {
 	Vec click;
 	window.clear(sf::Color(10, 10, 10));
 	while (window.isOpen()) {
-		if (clock2.getElapsedTime().asSeconds() > 1 / 66.0) {
+		if (clock2.getElapsedTime().asMilliseconds() >  Global::TILESIZE / 1.2) {
 			click =
 				Vec(sf::Mouse::getPosition(window).x / (Global::TILESIZE),
 					(window.getSize().y - sf::Mouse::getPosition(window).y) / (Global::TILESIZE));

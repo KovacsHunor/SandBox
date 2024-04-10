@@ -2,7 +2,7 @@
 #define UTIL_H
 
 struct Global {
-	static const int TILESIZE = 20;
+	static const int TILESIZE = 15;
 };
 
 struct Vec {

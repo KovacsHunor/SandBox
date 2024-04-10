@@ -1,8 +1,8 @@
 #include "particle.h"
 
 
-std::vector<Vec> Particle::updated = std::vector<Vec>();
-std::vector<Vec> Particle::active = std::vector<Vec>();
+std::deque<Vec> Particle::updated = std::deque<Vec>();
+std::deque<Vec> Particle::active = std::deque<Vec>();
 
 
 bool Particle::getAir(Field<Particle *> &particles)
