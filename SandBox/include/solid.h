@@ -10,7 +10,7 @@ class Solid : public Particle
 {
 public:
     Solid(Vec pos) : Particle(pos) {}
-    bool move(Field<Particle *> &);
+    void move(Field<Particle *> &);
     virtual ~Solid(){};
 };
 
@@ -19,7 +19,7 @@ class Sand : public Solid
 public:
     Sand(Vec pos);
 
-    bool tick(Field<Particle *> &particles);
+    void tick(Field<Particle *> &particles);
     virtual ~Sand() {}
 };
 

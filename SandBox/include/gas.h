@@ -15,7 +15,7 @@ public:
 
     bool isGas(){return true;}
     virtual bool canSwap(Vec delta, Field<Particle *> &particles);
-	virtual bool move(Field<Particle *> &);
+	virtual void move(Field<Particle *> &);
     bool canCorrode(){return false;}
 	virtual ~Gas(){};
 };
@@ -25,8 +25,8 @@ class Air : public Gas
 {
 public:
     Air(Vec pos = Vec(0, 0));
-    bool move(Field<Particle *> &){return false;};
-    bool tick(Field<Particle *> &);
+    void move(Field<Particle *> &){};
+    void tick(Field<Particle *> &);
     virtual ~Air() {}
 };
 
@@ -36,7 +36,7 @@ class Steam : public Gas
 public:
     Steam(Vec pos = Vec(0, 0));
 
-    bool tick(Field<Particle *> &);
+    void tick(Field<Particle *> &);
     virtual ~Steam() {}
 };
 

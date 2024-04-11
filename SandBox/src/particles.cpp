@@ -53,12 +53,9 @@ void Particles::tick() {
 	}
 
 	while (!Particle::active.empty()) {
-		if ((*this)[Particle::active.back()]->Keep()) {
-			temp.push_back(Particle::active.back());
-			intemp[Particle::active.back()] = 1;
-			(*this)[Particle::active.back()]->setKeep(false);
-		}
-		if ((*this)[Particle::active.back()]->tick(particles)) {
+		(*this)[Particle::active.back()]->tick(particles);
+
+		if ((*this)[Particle::active.back()]->Changed()) {
 			for (int i = Particle::active.back().x - 1; i <= Particle::active.back().x + 1; i++) {
 				for (int j = Particle::active.back().y - 1; j <= Particle::active.back().y + 1; j++) {
 					Vec pos = Vec(i, j);
@@ -68,7 +65,14 @@ void Particles::tick() {
 					}
 				}
 			}
+			(*this)[Particle::active.back()]->setChanged(false);
 		}
+		else if ((*this)[Particle::active.back()]->Keep()) {
+			temp.push_back(Particle::active.back());
+			intemp[Particle::active.back()] = 1;
+			(*this)[Particle::active.back()]->setKeep(false);
+		}
+
 		Particle::active.pop_back();
 	}
 	Particle::active = temp;

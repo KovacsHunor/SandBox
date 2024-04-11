@@ -6,3 +6,4 @@
 
 
 -glass (doesn't corrode)
+-changeable brush size

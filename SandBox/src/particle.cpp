@@ -14,7 +14,7 @@ bool Particle::getAir(Field<Particle *> &particles) {
 	return false;
 }
 
-bool Particle::all(std::string str, Field<Particle *> &particles) {
+bool Particle::all(const char *str, Field<Particle *> &particles) {
 	for (int i = pos.x - 1; i <= pos.x + 1; i++) {
 		for (int j = pos.y - 1; j <= pos.y + 1; j++) {
 			Vec p = Vec(i, j);

@@ -11,18 +11,19 @@ Steam::Steam(Vec pos) : Gas(pos) {
 	material = Material("steam", color, -1);
 }
 
-bool Steam::tick(Field<Particle *> &particles) {
-	bool action = move(particles);
+void Steam::tick(Field<Particle *> &particles) {
+	move(particles);
 	lifeTime -= rand() % 10;
-	if (lifeTime < 0 && rand() % 400 == 0) {
-		particles.transmutate(pos, new Water(pos));
-		return true;
+	if (lifeTime < 0) {
+		setKeep(true);
+		if (rand() % 400 == 0) {
+			particles.transmutate(pos, new Water(pos));
+			return;
+		}
 	}
-	active.push_back(pos);														//why???
-	return action;
 }
 
-bool Air::tick(Field<Particle *> &particles) { return move(particles); }
+void Air::tick(Field<Particle *> &particles) { move(particles); }
 
 bool Gas::canSwap(Vec delta, Field<Particle *> &particles) {
 	if (particles.validPos(pos + delta)) {
@@ -31,34 +32,25 @@ bool Gas::canSwap(Vec delta, Field<Particle *> &particles) {
 	return false;
 }
 
-bool Gas::move(Field<Particle *> &particles) {
+void Gas::move(Field<Particle *> &particles) {
+	setChanged(true);
 	if (trySwap(Vec(0, 1), particles)) {
 		speed = Vec(0, 0);
-		return true;
-	}
-	if (canSwap(Vec(-1, 0), particles) && trySwap(Vec(-1, 1), particles)) {
+	} else if (canSwap(Vec(-1, 0), particles) && trySwap(Vec(-1, 1), particles)) {
 		speed = Vec(0, 0);
-		return true;
-	}
-	if (canSwap(Vec(1, 0), particles) && trySwap(Vec(1, 1), particles)) {
+	} else if (canSwap(Vec(1, 0), particles) && trySwap(Vec(1, 1), particles)) {
 		speed = Vec(0, 0);
-		return true;
-	}
-	if (trySwap(speed, particles)) return true;
-	if (canSwap(Vec(-1, 0), particles) && canSwap(Vec(1, 0), particles)) {
+	} else if (trySwap(speed, particles)) {
+	} else if (canSwap(Vec(-1, 0), particles) && canSwap(Vec(1, 0), particles)) {
 		if (rand() % 2 == 0)
 			speed = Vec(1, 0);
 		else
 			speed = Vec(-1, 0);
-		return true;
-	}
-	if (canSwap(Vec(-1, 0), particles)) {
+	} else if (canSwap(Vec(-1, 0), particles)) {
 		speed = Vec(-1, 0);
-		return true;
-	}
-	if (canSwap(Vec(1, 0), particles)) {
+	} else if (canSwap(Vec(1, 0), particles)) {
 		speed = Vec(1, 0);
-		return true;
+	} else {
+		setKeep(false);
 	}
-	return false;
 }

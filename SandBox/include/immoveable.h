@@ -23,7 +23,7 @@ class Stone : public Immoveable {
 class Wood : public Immoveable, public Flammable {
    public:
 	Wood(Vec pos, bool onFire = false);
-	bool tick(Field<Particle *> &);
+	void tick(Field<Particle *> &);
 
 	virtual ~Wood() {}
 };

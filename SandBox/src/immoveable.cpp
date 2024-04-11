@@ -8,7 +8,7 @@ Wood::Wood(Vec pos, bool onFire) : Immoveable(pos), Flammable(onFire) {
 	if (!onFire) color = material.color;
 }
 
-bool Wood::tick(Field<Particle *> &particles) {
+void Wood::tick(Field<Particle *> &particles) {
 	if (onFire) {
 		for (int i = pos.x - 1; i <= pos.x + 1; i++) {
 			for (int j = pos.y - 1; j <= pos.y + 1; j++) {
@@ -27,7 +27,7 @@ bool Wood::tick(Field<Particle *> &particles) {
 		if (lifeTime < 0) {
 			if (rand() % 20 == 0) {
 				particles.transmutate(pos, new Air(pos));
-				return true;
+				return;
 			}
 		}
 
@@ -37,9 +37,8 @@ bool Wood::tick(Field<Particle *> &particles) {
 			trySwap(Vec(0, 1), particles);
 		}
 
-		return true;
+		setKeep(true);
 	}
-	return false;
 }
 
 Stone::Stone(Vec pos) : Immoveable(pos) {
