@@ -11,6 +11,9 @@
 
 class Particle {
    protected:
+	bool change;
+	bool keep;
+
 	sf::Color color;
 	Vec pos;
 	Material material;
@@ -26,6 +29,9 @@ class Particle {
 	virtual bool canCorrode() { return true; }
 	virtual bool isGas() { return false; }
 	bool getAir(Field<Particle *> &particles);
+	bool Keep() { return keep; }
+	void setKeep(bool b){keep = b;}
+	bool all(std::string str, Field<Particle *> &particles);
 
 	void draw(const sf::RenderWindow &window, std::vector<sf::Vertex> &vertices);
 
@@ -46,9 +52,7 @@ class Particle {
 
 	virtual void heat(Field<Particle *> &) {}
 
-	void print() {
-		std::cout << int(color.r) << " " << int(color.g) << " " << int(color.b) << std::endl;
-	}
+	void print() { std::cout << int(color.r) << " " << int(color.g) << " " << int(color.b) << std::endl; }
 
 	int getDensity() { return material.density; }
 	sf::Color getColor() { return material.color; }

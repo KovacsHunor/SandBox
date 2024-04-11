@@ -11,6 +11,7 @@
 
 class Particles
 {
+
     Field<Particle*> particles;
 public:
     Particles(Vec size);

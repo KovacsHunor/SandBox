@@ -13,24 +13,21 @@
 int main() {
 	srand(time(NULL));
 
-	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,
-										  sf::VideoMode::getDesktopMode().height),
+	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height),
 							"SandBox");
 	sf::Clock clock1;
 	sf::Clock clock2;
 	sf::Clock clock3;
-	Particles p(Vec(window.getSize().x / (2 * (Global::TILESIZE)),
-					window.getSize().y / (1 * (Global::TILESIZE))));
+	Particles p(Vec(window.getSize().x / (1 * (Global::TILESIZE)), window.getSize().y / (1 * (Global::TILESIZE))));
 
 	bool pour = false;
 	int which = 0;
 	Vec click;
 	window.clear(sf::Color(10, 10, 10));
 	while (window.isOpen()) {
-		if (clock2.getElapsedTime().asMilliseconds() >  Global::TILESIZE / 1.2) {
-			click =
-				Vec(sf::Mouse::getPosition(window).x / (Global::TILESIZE),
-					(window.getSize().y - sf::Mouse::getPosition(window).y) / (Global::TILESIZE));
+		if (clock2.getElapsedTime().asMilliseconds() > Global::TILESIZE / 1.2) {
+			click = Vec(sf::Mouse::getPosition(window).x / (Global::TILESIZE),
+						(window.getSize().y - sf::Mouse::getPosition(window).y) / (Global::TILESIZE));
 
 			sf::Event event;
 			while (window.pollEvent(event)) {
@@ -110,7 +107,7 @@ int main() {
 			if (clock3.getElapsedTime().asSeconds() > 1) {
 				clock3.restart();
 
-				std::cout << "fps:" << 1 / clock1.getElapsedTime().asSeconds() << std::endl;
+				std::cout << "fps : " << 1 / clock1.getElapsedTime().asSeconds() << std::endl;
 			}
 			clock1.restart();
 		}

@@ -16,11 +16,12 @@ void Water::heat(Field<Particle *> &particles) {
 }
 
 bool Water::tick(Field<Particle *> &particles) {
+	bool action = move(particles);
 	if (rand() % 3000 == 0) {
 		heat(particles);
-		return true;
+		action |= true;
 	}
-	return move(particles);
+	return action;
 }
 
 bool Liquid::move(Field<Particle *> &particles) {
@@ -100,16 +101,15 @@ bool Acid::tick(Field<Particle *> &particles) {
 	Vec corrodex = Vec(pos.x + 1 - 2 * (rand() % 2), pos.y);
 	Vec corrodey = Vec(pos.x, pos.y + 1 - 2 * (rand() % 2));
 
-	if ((rand() % 15 == 0) && (corrodey >= 0 && corrodey < particles.getSize()) &&
-		particles[corrodey]->canCorrode()) {
+	if ((rand() % 15 == 0) && (corrodey >= 0 && corrodey < particles.getSize()) && particles[corrodey]->canCorrode()) {
 		particles.transmutate(corrodey, new Air(corrodey));
 		if (rand() % 3 == 0) particles.transmutate(pos, new Air(pos));
 		return true;
-	} else if ((rand() % 60 == 0) && (corrodex >= 0 && corrodex < particles.getSize()) &&
-			   particles[corrodex]->canCorrode()) {
+	} else if ((rand() % 60 == 0) && (corrodex >= 0 && corrodex < particles.getSize()) && particles[corrodex]->canCorrode()) {
 		particles.transmutate(corrodex, new Air(corrodex));
 		if (rand() % 3 == 0) particles.transmutate(pos, new Air(pos));
 		return true;
 	}
+	keep = !all(std::string("acid"), particles);
 	return action;
 }

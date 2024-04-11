@@ -12,25 +12,21 @@ Steam::Steam(Vec pos) : Gas(pos) {
 }
 
 bool Steam::tick(Field<Particle *> &particles) {
-	move(particles);
+	bool action = move(particles);
 	lifeTime -= rand() % 10;
 	if (lifeTime < 0 && rand() % 400 == 0) {
 		particles.transmutate(pos, new Water(pos));
 		return true;
 	}
-	if (getAir(particles)) {
-		return true;
-	}
-	return false;
+	active.push_back(pos);														//why???
+	return action;
 }
 
 bool Air::tick(Field<Particle *> &particles) { return move(particles); }
 
 bool Gas::canSwap(Vec delta, Field<Particle *> &particles) {
-	if (pos + delta >= 0 && pos + delta < particles.getSize()) {
-		if (!particles[pos + delta]->isGas()) return false;
-		bool stable = particles[pos + delta]->lighter(*this);
-		return stable;
+	if (particles.validPos(pos + delta)) {
+		return particles[pos + delta]->lighter(*this);
 	}
 	return false;
 }
