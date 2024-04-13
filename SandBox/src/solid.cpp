@@ -5,14 +5,14 @@ Sand::Sand(Vec pos) : Solid(pos) {
 	material = Material("sand", color, 10);
 }
 
-void Sand::tick(Field<Particle *> &particles) { move(particles); }
+bool Sand::tick(Field<Particle *> &particles) { return move(particles); }
 
-void Solid::move(Field<Particle *> &particles) {
-	setChanged(true);
+bool Solid::move(Field<Particle *> &particles) {
 	if (trySwap(Vec(0, -1), particles)) {
 	} else if (canSwap(Vec(-1, 0), particles) && trySwap(Vec(-1, -1), particles)) {
 	} else if (canSwap(Vec(1, 0), particles) && trySwap(Vec(1, -1), particles)) {
 	} else {
-		setChanged(false);
+		return false;
 	}
+	return true;
 }

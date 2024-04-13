@@ -15,9 +15,10 @@ class Particles
     Field<Particle*> particles;
 public:
     Particles(Vec size);
-    void draw(sf::RenderWindow &window);
+	void redraw(sf::RenderWindow &window);
+	void draw(sf::RenderWindow &window);
 
-    void clear();
+	void clear();
     void wake(Vec p);
     void tick();
     bool validPos(Vec p){

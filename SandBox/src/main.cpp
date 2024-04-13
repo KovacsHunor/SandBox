@@ -9,6 +9,9 @@
 #include "particle.h"
 #include "particles.h"
 #include "solid.h"
+#include "util.h"
+
+int Global::brush_size = 3;
 
 int main() {
 	srand(time(NULL));
@@ -42,7 +45,7 @@ int main() {
 						if (p[click]->getName() == "wood") which = 3;
 						if (p[click]->getName() == "oil") which = 5;
 						if (p[click]->getName() == "stone") which = 6;
-						if (p[click]->getName() == "acid") which = 6;
+						if (p[click]->getName() == "acid") which = 7;
 					}
 				} else if (event.type == sf::Event::MouseButtonReleased) {
 					if (event.mouseButton.button == sf::Mouse::Left) {
@@ -55,14 +58,24 @@ int main() {
 						which = code - 26;
 					} else if (code == sf::Keyboard::Escape) {
 						p.clear();
+						window.clear(sf::Color(20, 20, 20));
+					} else if (code == sf::Keyboard::Up) {
+						Global::incBrushSize();
+					} else if (code == sf::Keyboard::Down) {
+						Global::decBrushSize();
 					}
-				} else if (event.type == sf::Event::Closed)
+				} else if (event.type == sf::Event::Resized) {
+					window.clear(sf::Color(20, 20, 20));
+					p.redraw(window);
+					window.display();
+				} else if (event.type == sf::Event::Closed) {
 					window.close();
+				}
 			}
 
 			if (pour) {
-				for (int i = click.x - 1; i <= click.x; i++) {
-					for (int j = click.y - 1; j <= click.y; j++) {
+				for (int i = click.x - Global::brush_size / 2; i <= click.x + (Global::brush_size - 1) / 2; i++) {
+					for (int j = click.y - Global::brush_size / 2; j <= click.y + (Global::brush_size - 1) / 2; j++) {
 						Vec pos = Vec(i, j);
 
 						if (p.validPos(pos)) {

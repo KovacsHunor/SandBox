@@ -12,6 +12,17 @@ Particles::Particles(Vec size) {
 	}
 }
 
+void Particles::redraw(sf::RenderWindow &window) {
+	std::vector<sf::Vertex> vertices;
+	for (int i = 0; i < getSize().x; i++) {
+		for (int j = 0; j < getSize().y; j++) {
+			particles[i][j]->draw(window, vertices);
+		}
+	}
+	window.draw(&vertices[0], vertices.size(), sf::Quads);
+	window.display();
+}
+
 void Particles::draw(sf::RenderWindow &window) {
 	std::vector<sf::Vertex> vertices;
 	while (!Particle::updated.empty()) {
@@ -53,9 +64,12 @@ void Particles::tick() {
 	}
 
 	while (!Particle::active.empty()) {
-		(*this)[Particle::active.back()]->tick(particles);
-
-		if ((*this)[Particle::active.back()]->Changed()) {
+		if ((*this)[Particle::active.back()]->Keep()) {
+			temp.push_back(Particle::active.back());
+			intemp[Particle::active.back()] = 1;
+			(*this)[Particle::active.back()]->setKeep(false);
+		}
+		if ((*this)[Particle::active.back()]->tick(particles)) {
 			for (int i = Particle::active.back().x - 1; i <= Particle::active.back().x + 1; i++) {
 				for (int j = Particle::active.back().y - 1; j <= Particle::active.back().y + 1; j++) {
 					Vec pos = Vec(i, j);
@@ -65,14 +79,7 @@ void Particles::tick() {
 					}
 				}
 			}
-			(*this)[Particle::active.back()]->setChanged(false);
 		}
-		else if ((*this)[Particle::active.back()]->Keep()) {
-			temp.push_back(Particle::active.back());
-			intemp[Particle::active.back()] = 1;
-			(*this)[Particle::active.back()]->setKeep(false);
-		}
-
 		Particle::active.pop_back();
 	}
 	Particle::active = temp;

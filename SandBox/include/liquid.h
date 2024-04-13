@@ -15,7 +15,7 @@ class Liquid : virtual public Particle {
 		setPos(pos);
 		speed = Vec(0, 0);
 	}
-	void move(Field<Particle *> &);
+	bool move(Field<Particle *> &);
 	virtual ~Liquid(){};
 };
 
@@ -23,7 +23,7 @@ class Acid : public Liquid {
    public:
 	Acid(Vec pos);
 	bool canCorrode() { return false; }
-	void tick(Field<Particle *> &);
+	bool tick(Field<Particle *> &);
 	virtual ~Acid() {}
 };
 
@@ -31,14 +31,14 @@ class Water : public Liquid {
    public:
 	Water(Vec pos);
 	void heat(Field<Particle *> &);
-	void tick(Field<Particle *> &);
+	bool tick(Field<Particle *> &);
 	virtual ~Water() {}
 };
 
 class Oil : public Liquid, public Flammable {
    public:
 	Oil(Vec pos, bool onFire = false);
-	void tick(Field<Particle *> &);
+	bool tick(Field<Particle *> &);
 	virtual ~Oil() {}
 };
 

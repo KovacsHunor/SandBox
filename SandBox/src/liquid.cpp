@@ -15,25 +15,25 @@ void Water::heat(Field<Particle *> &particles) {
 		particles.transmutate(pos, new Air(pos));
 }
 
-void Water::tick(Field<Particle *> &particles) {
-	move(particles);
-	setKeep(true);
-	if (rand() % 3000 == 0) {
-		heat(particles);  // transmutation !!!
+bool Water::tick(Field<Particle *> &particles) {
+	bool action = move(particles);
+
+	keep = !all(getName(), particles);
+	if (rand() % (3000 * Global::TILESIZE) == 0) {
+		heat(particles);  // transmutate
+		action |= true;
 	}
+	return action;
 }
 
-void Liquid::move(Field<Particle *> &particles) {
-	setChanged(true);
+bool Liquid::move(Field<Particle *> &particles) {
+	if (!all(getName(), particles)) keep = true;
+
 	if (trySwap(Vec(0, -1), particles)) {
-		speed = Vec(0, 0);
 	} else if (canSwap(Vec(-1, 0), particles) && trySwap(Vec(-1, -1), particles)) {
-		speed = Vec(0, 0);
 	} else if (canSwap(Vec(1, 0), particles) && trySwap(Vec(1, -1), particles)) {
-		speed = Vec(0, 0);
-	} else if (trySwap(speed, particles))
-		;
-	else if (canSwap(Vec(-1, 0), particles) && canSwap(Vec(1, 0), particles)) {
+	} else if (trySwap(speed, particles)) {
+	} else if (canSwap(Vec(-1, 0), particles) && canSwap(Vec(1, 0), particles)) {
 		if (rand() % 2 == 0)
 			speed = Vec(1, 0);
 		else
@@ -43,8 +43,10 @@ void Liquid::move(Field<Particle *> &particles) {
 	} else if (canSwap(Vec(1, 0), particles)) {
 		speed = Vec(1, 0);
 	} else {
-		setChanged(false);
+		speed = Vec(0, 0);
+		return false;
 	}
+	return true;
 }
 Oil::Oil(Vec pos, bool onFire) : Liquid(pos), Flammable(onFire) {
 	updated.push_back(pos);
@@ -52,8 +54,8 @@ Oil::Oil(Vec pos, bool onFire) : Liquid(pos), Flammable(onFire) {
 	if (!onFire) color = material.color;
 }
 
-void Oil::tick(Field<Particle *> &particles) {
-	move(particles);
+bool Oil::tick(Field<Particle *> &particles) {
+	bool event = move(particles);
 	if (onFire) {
 		for (int i = pos.x - 1; i <= pos.x + 1; i++) {
 			for (int j = pos.y - 1; j <= pos.y + 1; j++) {
@@ -69,15 +71,16 @@ void Oil::tick(Field<Particle *> &particles) {
 		if (lifeTime < 0) {
 			if (rand() % 10 == 0) {
 				particles.transmutate(pos, new Air(pos));
-				return;
+				return true;
 			}
 		}
 
 		if (!getAir(particles) && rand() % 24 < 7) {
 			extinguish();
 		}
-		setKeep(true);
+		event = true;
 	}
+	return event;
 }
 
 Acid::Acid(Vec pos) : Liquid(pos) {
@@ -86,17 +89,20 @@ Acid::Acid(Vec pos) : Liquid(pos) {
 	color = material.color;
 }
 
-void Acid::tick(Field<Particle *> &particles) {
-	move(particles);
+bool Acid::tick(Field<Particle *> &particles) {
+	bool action = move(particles);
 	Vec corrodex = Vec(pos.x + 1 - 2 * (rand() % 2), pos.y);
 	Vec corrodey = Vec(pos.x, pos.y + 1 - 2 * (rand() % 2));
 
 	if ((rand() % 15 == 0) && (corrodey >= 0 && corrodey < particles.getSize()) && particles[corrodey]->canCorrode()) {
 		particles.transmutate(corrodey, new Air(corrodey));
 		if (rand() % 3 == 0) particles.transmutate(pos, new Air(pos));
+		return true;
 	} else if ((rand() % 60 == 0) && (corrodex >= 0 && corrodex < particles.getSize()) && particles[corrodex]->canCorrode()) {
 		particles.transmutate(corrodex, new Air(corrodex));
 		if (rand() % 3 == 0) particles.transmutate(pos, new Air(pos));
+		return true;
 	}
-	keep = !all("acid", particles);
+	keep = !all(getName(), particles);
+	return action;
 }

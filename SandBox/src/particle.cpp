@@ -14,7 +14,7 @@ bool Particle::getAir(Field<Particle *> &particles) {
 	return false;
 }
 
-bool Particle::all(const char *str, Field<Particle *> &particles) {
+bool Particle::all(std::string str, Field<Particle *> &particles) {
 	for (int i = pos.x - 1; i <= pos.x + 1; i++) {
 		for (int j = pos.y - 1; j <= pos.y + 1; j++) {
 			Vec p = Vec(i, j);
@@ -56,10 +56,8 @@ void Particle::swap(Vec delta, Field<Particle *> &particles) {
 }
 
 bool Particle::canSwap(Vec delta, Field<Particle *> &particles) {
-	if (pos + delta >= 0 && pos + delta < particles.getSize()) {
-		bool stable = particles[pos + delta]->denser(*this);
-		// if (delta.y > 0)
-		//   stable = !stable;
+	if (particles.validPos(pos + delta) && particles[pos + delta]->moveable()) {
+		bool stable = denserThan(*particles[pos + delta]);
 		return stable;
 	}
 	return false;

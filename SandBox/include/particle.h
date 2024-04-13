@@ -11,7 +11,7 @@
 
 class Particle {
    protected:
-	bool changed;
+	bool change;
 	bool keep;
 
 	sf::Color color;
@@ -25,17 +25,13 @@ class Particle {
 
 	Particle() {}
 	Particle(Vec pos) : pos(pos) { updated.push_back(pos); }
-
+	static void DEBUG() { std::cout << active.size() << std::endl; }
 	virtual bool canCorrode() { return true; }
 	virtual bool isGas() { return false; }
 	bool getAir(Field<Particle *> &particles);
-
 	bool Keep() { return keep; }
-	bool Changed() { return changed; }
 	void setKeep(bool b) { keep = b; }
-	void setChanged(bool b) { changed = b; }
-
-	bool all(const char *str, Field<Particle *> &particles);
+	bool all(std::string str, Field<Particle *> &particles);
 
 	void draw(const sf::RenderWindow &window, std::vector<sf::Vertex> &vertices);
 
@@ -48,12 +44,12 @@ class Particle {
 	void setPos(Vec p) { pos = p; }
 	std::string getName() { return material.name; }
 
-	virtual bool denser(Particle &waiter) { return waiter.getDensity() > getDensity(); };
-	virtual bool lighter(Particle &waiter) { return waiter.getDensity() < getDensity(); };
+	virtual bool denserThan(Particle &waiter) { return waiter.getDensity() < getDensity(); };
+	virtual bool lighterThan(Particle &waiter) { return waiter.getDensity() > getDensity(); };
 	virtual bool canSwap(Vec delta, Field<Particle *> &particles);
-	virtual void tick(Field<Particle *> &) {}
-	virtual void move(Field<Particle *> &) {}
-
+	virtual bool tick(Field<Particle *> &) { return false; }
+	virtual bool move(Field<Particle *> &) { return false; }
+	virtual bool moveable() { return true; }
 	virtual void heat(Field<Particle *> &) {}
 
 	void print() { std::cout << int(color.r) << " " << int(color.g) << " " << int(color.b) << std::endl; }
@@ -61,8 +57,6 @@ class Particle {
 	int getDensity() { return material.density; }
 	sf::Color getColor() { return material.color; }
 	virtual ~Particle() {}
-
-	static void DEBUG() { std::cout << active.size() << std::endl; }
 };
 
 #endif

@@ -1,8 +1,13 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-struct Global {
-	static const int TILESIZE = 15;
+class Global {
+   public:
+	static const int TILESIZE = 5;
+	static int brush_size;
+
+	static void incBrushSize() { if(brush_size*TILESIZE < 200) brush_size++; }
+	static void decBrushSize() { if(brush_size > 1) brush_size--; }
 };
 
 struct Vec {

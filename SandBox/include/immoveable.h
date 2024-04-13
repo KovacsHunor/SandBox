@@ -11,6 +11,7 @@ class Immoveable : virtual public Particle {
    public:
 	Immoveable(Vec pos) { setPos(pos); }
 	bool denser(Particle &) { return false; };
+	bool moveable() { return false; }
 	virtual ~Immoveable(){};
 };
 
@@ -23,7 +24,7 @@ class Stone : public Immoveable {
 class Wood : public Immoveable, public Flammable {
    public:
 	Wood(Vec pos, bool onFire = false);
-	void tick(Field<Particle *> &);
+	bool tick(Field<Particle *> &);
 
 	virtual ~Wood() {}
 };
